@@ -1,0 +1,30 @@
+{
+  "site": {
+    "name": "Kevin Guo's Blog",
+    "description": "分享技术学习与软件开发实践"
+  },
+  "nav": {
+    "home": "首页",
+    "blog": "博客",
+    "tags": "标签",
+    "about": "关于"
+  },
+  "home": {
+    "eyebrow": "个人博客",
+    "description": "分享技术学习与开发实践"
+  },
+  "blog": {
+    "title": "博客",
+    "description": "技术学习、软件开发与实践记录",
+    "empty": "文章列表将在下一步接入 Nuxt Content。"
+  },
+  "tags": {
+    "title": "标签",
+    "description": "按主题浏览文章",
+    "empty": "标签列表将在文章查询完成后显示。"
+  },
+  "about": {
+    "title": "关于",
+    "description": "这里将展示更完整的个人介绍。"
+  }
+}

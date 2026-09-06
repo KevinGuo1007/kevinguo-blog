@@ -1,25 +1,23 @@
 # 个人博客技术方案
 
-> 状态：规划中，尚未开始实现  
-> 最后整理：2026-09-06  
-> 目标：使用 Nuxt 快速上线一个面向全球访问者、以中文创作为主的中英双语个人主页与文章博客。
+> 状态：基础工程已初始化，页面功能待实现
+> 最后整理：2026-09-06
+> 目标：使用 Nuxt 构建一个面向全球访问者、以英文为默认语言并提供手工维护中文译文的个人主页与文章博客。
 
 ## 1. 项目目标
 
-项目采用“个人主页 + 博客”的产品形态。第一阶段优先保证内容发布、阅读体验、搜索、SEO 和自动部署，不建设后台管理系统，也不追求复杂的应用功能。
+项目采用“个人主页 + 博客”的产品形态。第一阶段优先保证内容发布、阅读体验、搜索、SEO 和自动部署，不建设后台管理系统，也不追求复杂应用功能。
 
 核心原则：
 
 - 使用 Nuxt 生态内成熟的模块和 UI 组件缩短上线时间。
-- 页面结构和视觉风格自行设计，不基于 Nuxt UI 官方博客模板修改。
-- Markdown 和 Git 是内容源，所有文章与翻译结果都可以版本控制和回滚。
+- 页面结构和视觉风格自行设计，不使用现成博客页面模板。
+- Markdown 和 Git 是唯一内容源，所有文章及译文都可版本控制和回滚。
+- 英文是默认语言，也是文章的原始创作语言。
+- 中文文章由作者手工编写和维护，不使用机器翻译、翻译 API 或自动翻译流水线。
 - 网站以 SSG 方式生成，不依赖常驻服务端或业务数据库。
-- 中文是主要创作语言，英文由发布阶段的自动翻译流程生成。
-- 翻译不发生在用户访问期间，不让翻译服务的延迟和故障影响线上访问。
 
 ## 2. 技术栈
-
-除表格中明确标注“待最终确认”的 UI 组件项外，其余选型已经确认。
 
 | 领域 | 选型 | 用途 |
 | --- | --- | --- |
@@ -27,7 +25,7 @@
 | 前端框架 | Vue 3 | 页面与组件开发 |
 | 开发语言 | TypeScript | 类型约束和工程可维护性 |
 | 内容系统 | Nuxt Content | Markdown 文章、内容集合、Schema 和查询 |
-| UI 组件 | Nuxt UI（默认方案，待最终确认） | 按钮、弹窗、输入框、菜单等基础组件，不使用官方页面模板 |
+| UI 组件 | Nuxt UI | 按钮、弹窗、输入框、菜单等基础组件 |
 | 样式 | Tailwind CSS 4 | 页面布局、主题和自定义视觉样式 |
 | 多语言 | `@nuxtjs/i18n` | UI 文案、语言切换、多语言路由和国际化 SEO |
 | 图标 | Nuxt Icon / Iconify | 图标加载与展示 |
@@ -36,57 +34,68 @@
 | SEO | `useSeoMeta`、Sitemap、Robots、OG Image | 搜索引擎索引和社交分享 |
 | 输出方式 | SSG 静态生成 | 构建静态 HTML 与资源 |
 | 包管理 | pnpm | 依赖安装和脚本运行 |
-| 代码质量 | ESLint + TypeScript 检查 | 代码风格和静态类型检查 |
+| 代码质量 | ESLint + Vue TypeScript 检查 | 代码风格和静态类型检查 |
 | CI/CD | GitHub Actions | 校验、构建、预览和生产部署 |
 | 托管 | Vercel | 全球静态内容分发 |
 
-依赖版本应由 `pnpm-lock.yaml` 锁定，并在项目中固定 Node.js 与 pnpm 版本，避免本地和 GitHub Actions 构建结果不一致。
+依赖版本由 `pnpm-lock.yaml` 锁定，Node.js 与 pnpm 版本在仓库中固定，确保本地、GitHub Actions 和 Vercel 构建一致。
 
-## 3. 首版范围
+## 3. 多语言 URL 设计
 
-### 3.1 页面
+网站采用与 OpenAI 官网相似的 URL 形态：默认英文不带语言前缀，中文带 `/zh` 前缀。
+
+```text
+/                       # 英文首页
+/blog                   # 英文文章列表
+/blog/:slug             # 英文文章详情
+/tags                   # 英文标签集合
+/tags/:tag               # 英文标签详情
+/about                  # 英文关于页面
+
+/zh                     # 中文首页
+/zh/blog                # 中文文章列表
+/zh/blog/:slug          # 中文文章详情
+/zh/tags                # 中文标签集合
+/zh/tags/:tag            # 中文标签详情
+/zh/about               # 中文关于页面
+```
+
+实现规则：
+
+- `defaultLocale: "en"`。
+- `strategy: "prefix_except_default"`。
+- 英文 locale code 为 `en`，语言标记为 `en-US`。
+- 中文 locale code 为 `zh`，语言标记为 `zh-CN`。
+- 关闭浏览器语言自动检测，访问 `/` 始终显示英文。
+- 用户通过语言切换器主动切换语言。
+- 页面只实现一套，不创建 `pages/en` 或 `pages/zh` 目录。
+- 内部链接使用 `useLocalePath()`，语言切换使用 `useSwitchLocalePath()` 或 `SwitchLocalePathLink`。
+
+## 4. 首版范围
+
+### 4.1 页面
 
 - 个人主页：个人介绍、社交链接、精选文章和最新文章。
 - 文章列表：按发布时间展示文章，可进入标签筛选。
 - 文章详情：正文、目录、代码高亮、阅读时间、上一篇和下一篇。
-- 标签集合：展示全部标签。
-- 标签详情：展示属于某个标签的文章。
-- 关于页面：更完整的个人资料。
-- 404 页面。
+- 标签集合与标签详情。
+- 关于页面。
+- 双语 404 页面。
 - 全局搜索弹窗。
+- 显式语言切换器。
 
-推荐的逻辑路由如下，最终是否对所有语言使用前缀仍待确认：
-
-```text
-/zh/
-/zh/blog
-/zh/blog/:slug
-/zh/tags
-/zh/tags/:tag
-/zh/about
-
-/en/
-/en/blog
-/en/blog/:slug
-/en/tags
-/en/tags/:tag
-/en/about
-```
-
-### 3.2 首版不包含
+### 4.2 首版不包含
 
 - 内容管理后台。
 - 用户注册和登录。
 - 评论、点赞和收藏。
 - 业务数据库。
-- 运行时机器翻译。
-- 自定义 `<AutoT>` 标记、Vue 源码扫描或自研 i18n 编译器。
-- 现成博客页面模板。
+- 任何机器翻译、运行时翻译或翻译 API。
+- 自动生成译文的脚本或 GitHub Action。
+- 自定义 i18n 编译器或 UI 文案自动提取。
 - Newsletter 和定时发布，除非后续明确加入。
 
-## 4. 建议的项目结构
-
-以下结构是实施目标，不代表仓库中已经存在这些文件：
+## 5. 项目结构
 
 ```text
 .
@@ -98,20 +107,18 @@
 │   ├── pages/
 │   └── app.vue
 ├── content/
-│   ├── zh-CN/blog/
-│   └── en-US/blog/
+│   ├── en-US/blog/          # 英文原始文章
+│   └── zh-CN/blog/          # 手工维护的中文译文
 ├── i18n/
 │   └── locales/
-│       ├── zh-CN.json
-│       └── en-US.json
+│       ├── en-US.json
+│       └── zh-CN.json
 ├── public/
 │   └── images/
 ├── scripts/
-│   ├── translate-content.ts
-│   └── check-translations.ts
+│   └── content-check.ts
 ├── .github/workflows/
 │   ├── ci.yml
-│   ├── translate.yml
 │   └── deploy.yml
 ├── content.config.ts
 ├── nuxt.config.ts
@@ -119,55 +126,31 @@
 └── pnpm-lock.yaml
 ```
 
-UI 短文案和文章内容分开管理：
+UI 文案与文章内容分开管理：
 
-- `i18n/locales/*.json` 保存导航、按钮、搜索提示、空状态等 UI 文案，使用原生 `$t()`、`t()` 和 `i18n-t`。
-- `content/<locale>/blog/*.md` 保存文章及文章级 SEO 信息，由 Nuxt Content 管理。
+- `i18n/locales/*.json` 保存导航、按钮、搜索提示、空状态等 UI 文案。
+- `content/en-US/blog/*.md` 保存英文原文。
+- `content/zh-CN/blog/*.md` 保存作者手工维护的中文译文。
 
-## 5. 多语言方案
+## 6. 内容与手工翻译方案
 
-### 5.1 语言定义
+### 6.1 内容集合
 
-- 源语言：`zh-CN`。
-- 首个目标语言：`en-US`。
-- UI 文案：在语言 JSON 中维护，不实现自动源码提取。
-- 长文章：中文 Markdown 为源文件，英文 Markdown 为生成并可人工编辑的版本。
+分别建立两个 Nuxt Content 集合：
 
-推荐所有语言都使用 URL 前缀，即 `@nuxtjs/i18n` 的 `prefix` 路由策略。根路径 `/` 默认进入中文站；若启用浏览器语言检测，建议仅在访问根路径时执行，避免覆盖用户主动选择的语言。
+- `blogEn`：读取 `content/en-US/blog/**/*.md`。
+- `blogZh`：读取 `content/zh-CN/blog/**/*.md`。
 
-### 5.2 UI 文案
+页面根据当前 locale 选择集合，多语言页面路由与 Content 文件路径保持解耦。
 
-UI 组件直接使用 `@nuxtjs/i18n`：
+### 6.2 文章对应关系
 
-```vue
-<template>
-  <h1>{{ $t('home.hero.title') }}</h1>
-  <i18n-t keypath="home.hero.description" />
-</template>
-```
-
-语言文件采用清晰、稳定的语义 ID：
-
-```json
-{
-  "home": {
-    "hero": {
-      "title": "分享我的技术学习与开发实践"
-    }
-  }
-}
-```
-
-### 5.3 内容集合
-
-中文和英文文章建议分别建立 Nuxt Content 集合，并通过当前 locale 选择对应集合。多语言路由与 Content 内部路径应解耦，避免路径中出现重复语言前缀。
-
-文章建议使用相同的 ASCII slug 和稳定的 `translationKey`：
+英文和中文文件独立维护，通过相同的 ASCII `slug` 和 `translationKey` 建立关系：
 
 ```yaml
 ---
-title: 使用 Nuxt 搭建个人博客
-description: 记录个人博客的技术选型与实现过程
+title: Building a Personal Blog with Nuxt
+description: Notes on the technical decisions behind this personal blog
 slug: building-a-nuxt-blog
 translationKey: building-a-nuxt-blog
 date: 2026-09-06
@@ -178,137 +161,92 @@ tags:
   - frontend
 featured: false
 draft: false
-translation:
-  enabled: true
-  targets:
-    - en-US
 ---
 ```
 
-标签在 Frontmatter 中保存稳定 ID，例如 `frontend`；中英文显示名称由单独的语言字典提供。这样语言切换不会改变标签标识或破坏 URL。
+内容规则：
 
-## 6. 文章自动翻译
+- 英文文章是原文，可以没有中文译文并单独发布。
+- 中文文章必须存在相同 `translationKey` 的英文原文。
+- 中文译文不存在时，不生成对应中文文章路由。
+- 语言切换器只链接真实存在的译文，不能链接到 404。
+- `slug`、`translationKey`、标签和图片路径等结构化字段应在两种语言中保持一致。
+- 标题、摘要、SEO 文案、正文和图片替代文字由作者分别编写。
+- 标签使用稳定 ID；中英文显示名称放在语言字典中。
+- 原文更新后，由作者自行检查并同步中文译文。
 
-### 6.1 基本约束
+项目不维护 `machine`、`reviewed`、`locked`、`stale` 等机器翻译状态，也不保存模型、提示词或翻译缓存信息。
 
-翻译发生在内容发布阶段，由独立脚本或 GitHub Action 执行。翻译结果写入 `content/en-US/blog/` 并进入 Git 版本控制。正式的 `nuxt generate` 不直接调用翻译 API，只检查翻译产物是否满足发布要求。
-
-推荐流程：
-
-```text
-编写或修改中文 Markdown
-  -> 检测需要翻译的文章
-  -> 调用翻译服务
-  -> 生成或更新英文 Markdown
-  -> 校验 Markdown 与 MDC 结构
-  -> 创建翻译 PR
-  -> 人工确认并合并
-  -> 静态构建
-  -> 部署 Vercel
-```
-
-### 6.2 缓存与版本
-
-翻译脚本需要记录源内容 Hash，只翻译新增或修改的文章。Hash 应基于实际需要翻译的字段和正文生成，并排除 `updated`、翻译状态等不会影响译文的元数据。
-
-为了降低长文章小幅修改后的重复成本，可以进一步保存章节或段落级 Hash。缓存键至少包含：
+### 6.3 推荐写作流程
 
 ```text
-sourceHash + targetLocale + promptVersion + glossaryHash
+编写或修改英文 Markdown
+  -> 本地预览英文页面
+  -> 需要中文版本时手工创建或更新中文 Markdown
+  -> 检查 slug 与 translationKey 对应关系
+  -> 运行内容校验和静态构建
+  -> 提交英文原文与中文译文
+  -> 部署
 ```
-
-翻译服务、提示词版本、模型、生成时间和审核状态不应混入 Nuxt i18n 语言 JSON，可保存在独立 Manifest 或英文文章的翻译元数据中。
-
-### 6.3 Markdown 结构保护
-
-翻译脚本不能简单通过正则替换或把整份原始文件不加保护地交给模型。应解析 Markdown/MDC，隔离 Frontmatter，并确保以下内容保持不变：
-
-- 代码块和行内代码。
-- 链接目标 URL。
-- 图片地址。
-- HTML 标签。
-- MDC 组件名称、属性和 Vue binding。
-- 显式标题 ID。
-- 日期、slug、图片、标签 ID 等非翻译字段。
-
-需要翻译的内容包括标题、摘要、SEO 文案、正文段落、列表、引用、表格文字、链接显示文字和图片替代文字。MDC 组件属性默认不翻译；确有需要时使用组件和属性白名单。
-
-生成英文文件后必须再次解析并比较结构签名。若代码块、URL、图片或 MDC 结构发生变化，任务失败且不得覆盖上一个有效版本。
-
-### 6.4 审核与失败回退
-
-推荐支持以下翻译状态：
-
-- `machine`：机器翻译，尚未人工确认。
-- `reviewed`：已经人工审核。
-- `locked`：允许长期人工维护，自动流程不得覆盖。
-- `stale`：中文原文已更新，英文版本尚未同步。
-
-推荐的生产策略是：
-
-- 翻译失败时不覆盖旧译文。
-- 结构校验失败时不写入英文文件。
-- 对声明必须翻译的文章执行严格检查；检查失败则不部署新版本，Vercel 保留上一个成功版本。
-- 若未来希望中文文章不等待英文翻译即可发布，需要额外实现逐文章的语言可用性和 `hreflang` 控制。
-
-自动翻译服务、模型、费用上限、重试策略、术语表和翻译风格目前尚未确定，是该功能实施前唯一明确的外部依赖。
 
 ## 7. 搜索与标签
 
-首版采用 Nuxt Content 的 `queryCollectionSearchSections` 生成搜索数据，Fuse.js 在浏览器中完成搜索。
+首版使用 Nuxt Content 的 `queryCollectionSearchSections` 生成搜索数据，Fuse.js 在浏览器中完成搜索。
 
-推荐交互：
+规则：
 
 - Header 提供搜索入口。
 - `Cmd/Ctrl + K` 打开搜索弹窗。
-- 只搜索当前语言的文章。
+- 英文页面只搜索 `blogEn`。
+- 中文页面只搜索 `blogZh`。
 - 搜索标题、摘要、正文和标签。
-- 中文与英文索引分开生成并按需加载。
+- 两种语言索引分开生成并按需加载。
 - `draft: true` 的文章不进入索引。
 
-对于个人博客的初始文章规模，客户端 Fuse.js 足够简单。文章数量或搜索索引明显增大后，再评估构建期静态索引或 Pagefind，不在首版提前引入。
+文章数量或搜索索引明显增大后，再评估 Pagefind，不在首版提前引入。
 
 ## 8. SEO
 
 页面 SEO 由以下部分组成：
 
-- `useSeoMeta` 设置页面和文章的标题、描述及社交分享信息。
-- `@nuxtjs/i18n` 的 `useLocaleHead` 设置 HTML `lang`、canonical、`hreflang` 和 Open Graph locale。
-- Sitemap 输出所有可发布语言下的主页、文章页和标签页。
+- `useSeoMeta` 设置标题、描述和社交分享信息。
+- `useLocaleHead` 设置 HTML `lang`、canonical、`hreflang` 和 Open Graph locale。
+- Sitemap 输出所有可发布的英文和中文页面。
 - Robots 控制抓取策略并关联 Sitemap。
 - OG Image 提供默认图片，并允许文章覆盖。
 
-只有真实存在且通过校验的目标语言页面才能进入 Sitemap 和 `hreflang`。不能为缺少英文内容的文章生成指向 404 页面的英文 alternate URL。
+URL 与 alternate 规则：
+
+- 英文 canonical 使用无前缀 URL，例如 `/blog/example`。
+- 中文 canonical 使用 `/zh` 前缀，例如 `/zh/blog/example`。
+- 只有中文译文真实存在时，英文文章才输出指向中文页面的 `hreflang`。
+- 中文页面必须输出对应英文原文的 alternate URL。
+- 不为缺失译文生成中文 Sitemap URL 或无效 `hreflang`。
+- 草稿不进入 Sitemap。
 
 正式上线前需要补齐：
 
 - 网站名称和作者名称。
-- 网站描述。
-- 生产域名和 `baseUrl`。
+- 英文与中文网站描述。
+- 生产域名。
 - 默认 OG 图片。
 - 社交账号链接。
 
 ## 9. SSG 与动态路由
 
-项目使用 `nuxt generate` 生成静态站点。文章页、标签页和多语言动态路由不能只依赖页面文件本身，应在构建阶段显式收集：
+项目使用 `nuxt generate` 生成静态站点。构建阶段需要显式收集：
 
-- 两种语言的已发布文章路由。
-- 两种语言的标签路由。
-- 固定页面路由。
+- 英文固定页面路由。
+- 中文固定页面路由。
+- 所有已发布英文文章路由。
+- 所有真实存在的中文文章路由。
+- 两种语言中实际存在的标签路由。
 
-构建时应排除草稿、无效内容和不满足翻译发布策略的目标语言页面。生成结束后需要检查关键页面、Sitemap、404 和静态资源是否存在。
+构建时排除草稿和无效内容。生成结束后检查英文首页、中文首页、文章详情、标签、Sitemap、404 和静态资源。
 
 ## 10. GitHub Actions 与 Vercel
 
-建议拆分为三个工作流：
-
-### `translate.yml`
-
-- 检测中文文章变化。
-- 调用翻译服务。
-- 写入英文 Markdown。
-- 运行结构与翻译完整性检查。
-- 创建或更新翻译 PR。
+建议拆分为两个工作流。
 
 ### `ci.yml`
 
@@ -316,84 +254,85 @@ sourceHash + targetLocale + promptVersion + glossaryHash
 - ESLint。
 - TypeScript 类型检查。
 - Nuxt Content Schema 校验。
-- 翻译映射、重复 slug 和标签校验。
+- 中英文映射、重复 slug、标签与资源路径校验。
 - 执行 SSG 构建。
 
 ### `deploy.yml`
 
-- Pull Request 可部署 Vercel Preview。
+- Pull Request 部署 Vercel Preview。
 - `main` 分支部署 Vercel Production。
 - 使用 Vercel CLI 拉取项目配置、构建并通过 `vercel deploy --prebuilt` 发布。
 - 使用 GitHub Actions `concurrency` 避免同一环境并行部署。
 
-Vercel 原生 Git 自动部署应关闭，避免同一次提交由 Vercel Git 集成和 GitHub Actions 重复部署。
+Vercel 原生 Git 自动部署应关闭，避免同一提交重复部署。
 
-预期使用的 GitHub Secrets：
+预期 GitHub Secrets：
 
 ```text
 VERCEL_TOKEN
 VERCEL_ORG_ID
 VERCEL_PROJECT_ID
-TRANSLATION_API_KEY
 ```
 
-具体翻译服务确定后，可将通用的 `TRANSLATION_API_KEY` 替换成供应商明确的变量名。
+项目不需要任何翻译服务密钥。
 
-## 11. 计划中的项目命令
-
-以下是建议约定，需在初始化项目时落实：
+## 11. 项目命令
 
 ```text
 pnpm dev                  # 本地开发
 pnpm lint                 # ESLint
-pnpm typecheck            # TypeScript / Nuxt 类型检查
-pnpm content:check        # 内容 Schema 与路由校验
-pnpm translate            # 生成需要更新的英文文章
-pnpm translate:check      # 检查翻译状态与结构
+pnpm typecheck            # Vue / TypeScript 类型检查
+pnpm content:check        # 内容 Schema、映射与路由校验，待实现
 pnpm generate             # 生成静态站点
 pnpm preview              # 本地预览生产产物
+pnpm check                # 执行当前全部质量检查
 ```
 
 ## 12. 已知技术问题与处理方向
 
 | 问题 | 处理方向 |
 | --- | --- |
-| i18n 路由与 Content 路径可能产生重复语言前缀 | 多语言页面路由和内容集合解耦，按 locale 选择集合 |
-| SSG 不一定自动发现全部文章和标签动态路由 | 构建阶段显式枚举并预渲染 |
-| 缺少译文时可能生成无效 `hreflang` | 构建前校验目标页面是否存在，只输出有效 alternate URL |
-| 翻译 API 导致构建不确定 | 翻译独立执行并提交结果，正式构建不调用模型 |
-| 模型可能破坏 Markdown、URL、代码和 MDC | AST/结构化分段、占位符保护、生成后结构校验 |
-| 自动翻译可能覆盖人工修改 | 使用审核状态和 `locked` 机制 |
-| Fuse.js 索引可能随文章增加而变大 | 按语言懒加载，达到规模阈值后更换静态搜索方案 |
-| Vercel 与 GitHub Actions 可能重复部署 | 关闭 Vercel 原生 Git 自动部署 |
-| 本地与 CI 依赖版本不一致 | 固定 Node.js、pnpm 和 lockfile |
+| 默认语言意外出现 `/en` 前缀 | 使用 `prefix_except_default`，所有链接通过 locale helper 生成 |
+| 浏览器自动把 `/` 跳到中文 | 关闭 `detectBrowserLanguage`，只允许用户主动切换 |
+| i18n 路由与 Content 路径重复语言前缀 | 页面路由和内容集合解耦，按 locale 选择集合 |
+| 缺少中文译文时语言切换进入 404 | 切换前通过 `translationKey` 检查目标集合是否存在 |
+| 缺少译文时生成无效 `hreflang` | 只为真实存在的译文输出 alternate URL |
+| 英文原文更新但中文译文遗漏 | 内容校验报告成对文章更新时间差异，由作者人工确认 |
+| SSG 未发现全部动态路由 | 构建阶段显式枚举并预渲染 |
+| Fuse.js 索引随文章增加而变大 | 按语言懒加载，达到阈值后评估 Pagefind |
 | 标签翻译导致 URL 不稳定 | 使用稳定标签 ID，显示名称单独翻译 |
+| 本地与 CI 依赖版本不一致 | 固定 Node.js、pnpm 和 lockfile |
 
-## 13. 待最终确认
+## 13. 已确认决策
 
-开始实现前仍需确定以下事项：
+1. 使用 Nuxt UI 基础组件，页面视觉自行设计。
+2. 英文是默认语言和原始创作语言。
+3. 英文路由不带前缀，中文路由统一带 `/zh`。
+4. 访问根路径始终显示英文，不执行浏览器语言自动跳转。
+5. UI 文案和文章的中文版本都由作者手工维护。
+6. 不实现机器翻译、翻译 API、自动翻译脚本或翻译工作流。
+7. 搜索首版仅提供全局弹窗。
+8. 首版默认不接入访问统计。
 
-1. 是否确认使用 Nuxt UI 基础组件；若否，则改为纯 Tailwind 自建组件。
-2. 是否确认 `/zh/*`、`/en/*` 均带语言前缀，根路径 `/` 默认进入中文站。
-3. 自动翻译所使用的供应商、模型、预算上限、翻译风格和术语表。
-4. 机器翻译是否必须经过人工审核后才能发布。
-5. 翻译失败时阻止整个部署，还是允许只发布中文版本。
-6. 首页是否只包含个人介绍、社交链接、精选文章和最新文章。
-7. 是否需要独立搜索页面；默认仅提供搜索弹窗。
-8. 正式网站名称、作者信息、生产域名、默认 OG 图片和社交链接。
-9. 是否在首版接入访问统计；默认不接入。
+仍待确定：
+
+- 正式网站名称、作者信息、生产域名、默认 OG 图片和社交链接。
+- 首页最终信息架构与视觉方案。
+- 英文原文修改后提醒中文译文同步的具体校验规则。
 
 ## 14. 首版验收标准
 
-- 中文和英文固定页面可访问并能正确切换语言。
-- 可通过 Markdown 新增中文文章，并生成可版本控制的英文文章。
+- `/`、`/blog`、`/tags`、`/about` 显示英文且不带语言前缀。
+- `/zh`、`/zh/blog`、`/zh/tags`、`/zh/about` 显示中文。
+- 用户可主动切换语言，且不会因浏览器语言被自动重定向。
+- 可通过 Markdown 独立维护英文原文和中文译文。
 - 文章、标签和搜索结果只展示当前语言内容。
+- 缺少中文译文时，不生成无效中文文章页、Sitemap URL 或 `hreflang`。
 - 草稿不会出现在页面、搜索索引和 Sitemap 中。
 - 文章详情正确渲染 Markdown、代码块、图片、目录和 MDC 组件。
 - 页面具备正确的 title、description、canonical、`hreflang`、OG 和 Sitemap。
 - `pnpm lint`、`pnpm typecheck`、内容校验和 `pnpm generate` 全部通过。
-- Pull Request 能产生 Preview，`main` 分支能通过 GitHub Actions 部署到 Vercel Production。
-- 翻译或部署失败不会覆盖线上最后一个成功版本。
+- Pull Request 能产生 Preview，`main` 能部署到 Vercel Production。
 
 ## 15. 官方参考
 

@@ -9,10 +9,13 @@
   },
   "scripts": {
     "build": "nuxt build",
+    "check": "pnpm lint && pnpm typecheck && pnpm generate",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
+    "lint": "eslint .",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck"
   },
   "dependencies": {
     "@nuxt/content": "^3.16.0",
@@ -32,6 +35,8 @@
   },
   "devDependencies": {
     "@nuxt/eslint": "^1.17.0",
-    "eslint": "^10.10.0"
+    "eslint": "^10.10.0",
+    "typescript": "^5.9.3",
+    "vue-tsc": "^3.2.5"
   }
 }

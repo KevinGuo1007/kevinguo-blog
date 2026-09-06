@@ -1,0 +1,30 @@
+{
+  "site": {
+    "name": "Kevin Guo's Blog",
+    "description": "Notes on technology, learning and software development"
+  },
+  "nav": {
+    "home": "Home",
+    "blog": "Blog",
+    "tags": "Tags",
+    "about": "About"
+  },
+  "home": {
+    "eyebrow": "Personal Blog",
+    "description": "Notes on technology, learning and software development"
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Notes on technology, software development and practice",
+    "empty": "The article list will be connected to Nuxt Content next."
+  },
+  "tags": {
+    "title": "Tags",
+    "description": "Browse articles by topic",
+    "empty": "Tags will appear after article queries are implemented."
+  },
+  "about": {
+    "title": "About",
+    "description": "A longer personal introduction will be added here."
+  }
+}
