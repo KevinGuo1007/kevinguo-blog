@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
 
   site: {
-    url: process.env.NUXT_PUBLIC_SITE_URL || "https://example.com",
+    url: "https://kevinguo.ink",
     name: "Kevin Guo's Blog",
     description: "Notes on technology, learning and software development",
     defaultLocale: "en",
@@ -28,7 +28,7 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
 
   i18n: {
-    baseUrl: process.env.NUXT_PUBLIC_SITE_URL || "https://example.com",
+    baseUrl: "https://kevinguo.ink",
     defaultLocale: "en",
     strategy: "prefix_except_default",
 

@@ -30,13 +30,7 @@
 pnpm install --frozen-lockfile
 ```
 
-复制本地环境变量：
-
-```bash
-cp .env.example .env
-```
-
-本地开发不需要设置站点地址，静态生成会使用 `https://example.com` 作为占位值。配置正式域名后，取消 `.env` 中 `NUXT_PUBLIC_SITE_URL` 的注释，并改为完整的 HTTPS 地址；部署生产环境前必须完成这一步。
+生产域名固定为 `https://kevinguo.ink`，直接配置在 `nuxt.config.ts` 中，同时用于 canonical、`hreflang`、Sitemap 和 Open Graph URL。
 
 启动开发服务器：
 
@@ -200,7 +194,7 @@ app/pages/blog/[slug].vue
 
 ### SEO 与静态生成
 
-- [ ] 确定生产域名、作者资料、社交链接和默认 OG 图片
+- [ ] 确定作者资料、社交链接和默认 OG 图片
 - [ ] 为各页面接入 `useLocaleHead()` 和完整 SEO 元数据
 - [ ] 显式收集双语文章和标签的 Nitro prerender 路由
 - [ ] 将有效文章和标签动态路由接入 Sitemap
