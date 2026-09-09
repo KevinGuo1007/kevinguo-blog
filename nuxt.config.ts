@@ -27,6 +27,20 @@ export default defineNuxtConfig({
 
   css: ["~/assets/css/main.css"],
 
+  icon: {
+    clientBundle: {
+      icons: [
+        "lucide:tag",
+        "simple-icons:github",
+        "simple-icons:x",
+        "simple-icons:youtube",
+        "simple-icons:linkedin",
+        "simple-icons:bilibili",
+        "simple-icons:tiktok",
+      ],
+    },
+  },
+
   i18n: {
     baseUrl: "https://kevinguo.ink",
     defaultLocale: "en",

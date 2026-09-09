@@ -41,12 +41,18 @@
   },
   "home": {
     "eyebrow": "个人博客",
-    "description": "分享技术学习与开发实践"
+    "description": "分享技术学习与开发实践",
+    "role": "全栈开发 / 运维开发",
+    "introduction": "你好 👋，我是 Kevin Guo，一名专注于全栈开发与运维开发的软件工程师。我喜欢将想法构建成可靠、易维护的产品，也在持续探索自动化、云原生和工程效率。这个网站用于记录我的技术实践、项目经历与学习思考，希望这些内容能给你带来一些启发。",
+    "socialLinksLabel": "社交平台"
   },
   "blog": {
     "title": "博客",
     "description": "技术学习、软件开发与实践记录",
-    "empty": "文章列表将在下一步接入 Nuxt Content。",
+    "filterLabel": "按标签筛选",
+    "filterPlaceholder": "输入标签并按回车搜索",
+    "noMatches": "没有找到包含所选标签的文章。",
+    "empty": "暂时还没有文章。",
     "back": "返回博客"
   },
   "projects": {

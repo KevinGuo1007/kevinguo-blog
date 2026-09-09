@@ -41,12 +41,18 @@
   },
   "home": {
     "eyebrow": "Personal Blog",
-    "description": "Notes on technology, learning and software development"
+    "description": "Notes on technology, learning and software development",
+    "role": "Full-Stack Developer / DevOps Engineer",
+    "introduction": "Hello 👋, I'm Kevin Guo, a software engineer focused on full-stack and DevOps engineering. I enjoy turning ideas into reliable, maintainable products while exploring automation, cloud-native technologies and developer productivity. This website is where I share the projects I build, the problems I solve and the things I learn along the way.",
+    "socialLinksLabel": "Social platforms"
   },
   "blog": {
     "title": "Blog",
     "description": "Notes on technology, software development and practice",
-    "empty": "The article list will be connected to Nuxt Content next.",
+    "filterLabel": "Filter by tags",
+    "filterPlaceholder": "Type a tag and press Enter",
+    "noMatches": "No posts contain all of the selected tags.",
+    "empty": "No posts yet.",
     "back": "Back to blog"
   },
   "projects": {

@@ -6,6 +6,8 @@ translationKey: hello-nuxt
 date: 2026-09-06
 tags:
   - nuxt
+  - vue
+  - web
 featured: true
 draft: false
 ---
