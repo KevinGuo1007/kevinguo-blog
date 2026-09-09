@@ -54,7 +54,9 @@
     "noMatches": "No posts contain all of the selected tags.",
     "empty": "No posts yet.",
     "back": "Back to blog",
-    "toc": "On this page"
+    "toc": "On this page",
+    "openToc": "Open table of contents",
+    "backToTop": "Back to top"
   },
   "projects": {
     "title": "Projects",

@@ -4,8 +4,9 @@
 @source "../../../content/**/*";
 
 @theme static {
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
 
   /* Standalone ChatGPT-inspired purple accent palette. */
   --color-accent-50: #f5f3ff;
@@ -72,8 +73,15 @@
 }
 
 html {
+  scroll-behavior: smooth;
   overflow-y: scroll;
   background: var(--ui-bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 body {

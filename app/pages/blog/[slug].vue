@@ -70,10 +70,35 @@ const surround = computed(() =>
 );
 
 const tocLinks = computed(() => article.value?.body?.toc?.links ?? []);
+const isTocOpen = ref(false);
+
+function closeToc() {
+  isTocOpen.value = false;
+}
+
+function scrollToTop() {
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  window.scrollTo({
+    top: 0,
+    behavior: prefersReducedMotion ? "auto" : "smooth",
+  });
+}
 </script>
 
 <template>
-  <UPage v-if="article" as="article" class="py-12 sm:py-16">
+  <UPage
+    v-if="article"
+    as="article"
+    class="py-12 sm:py-16"
+    :ui="{
+      root: 'lg:grid-cols-[minmax(0,1fr)_14rem] lg:gap-8',
+      center: 'min-w-0 lg:col-span-1',
+      right: 'min-w-0 lg:col-span-1',
+    }"
+  >
     <div>
       <UButton
         :to="localePath('/blog')"
@@ -112,7 +137,62 @@ const tocLinks = computed(() => article.value?.body?.toc?.links ?? []);
         :title="$t('blog.toc')"
         :links="tocLinks"
         highlight
+        class="hidden lg:flex"
+        :ui="{ linkText: 'whitespace-normal leading-5' }"
       />
     </template>
+
+    <div
+      class="fixed right-4 z-40 flex flex-col-reverse gap-3 sm:right-6 lg:right-8"
+      style="bottom: calc(1rem + env(safe-area-inset-bottom))"
+    >
+      <UDrawer
+        v-if="tocLinks.length"
+        v-model:open="isTocOpen"
+        class="lg:hidden"
+        :title="$t('blog.toc')"
+        :ui="{
+          content: 'max-h-[min(75dvh,36rem)]',
+          container: 'gap-3',
+          body: 'min-h-0 overflow-y-auto',
+        }"
+      >
+        <UButton
+          icon="i-lucide-list"
+          color="primary"
+          variant="solid"
+          size="xl"
+          square
+          class="rounded-full shadow-lg"
+          :aria-label="$t('blog.openToc')"
+        />
+
+        <template #body>
+          <UContentToc
+            :links="tocLinks"
+            highlight
+            default-open
+            :ui="{
+              root: 'static max-h-none overflow-visible bg-transparent p-0 mx-0 backdrop-blur-none',
+              container: 'border-0 p-0',
+              trigger: 'hidden',
+              content: 'max-h-none overflow-visible',
+            }"
+            @move="closeToc"
+          />
+        </template>
+      </UDrawer>
+
+      <UButton
+        icon="i-lucide-chevron-up"
+        color="neutral"
+        variant="solid"
+        size="xl"
+        square
+        class="rounded-full shadow-lg"
+        :aria-label="$t('blog.backToTop')"
+        @click="scrollToTop"
+      />
+    </div>
   </UPage>
 </template>

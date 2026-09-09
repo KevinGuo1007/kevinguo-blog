@@ -18,11 +18,17 @@ draft: false
 
 ## swiftUI
 
-> [!abstract] 笔记范围
-> 本节整理自 Apple 的 [Learning SwiftUI](https://developer.apple.com/tutorials/swiftui-concepts) 与 [Exploring SwiftUI Sample Apps](https://developer.apple.com/tutorials/sample-apps) 两条学习路径。目标是用“核心知识 → 最小示例 → 原文入口”的形式快速复习，而不是逐步照抄教程。
+::note
+[**笔记范围**]{.mb-2 .block}
 
-> [!warning] 版本提示（2026-09-02）
-> Apple 已在这两条路径顶部标注：内容不再代表最新的 SwiftUI 或 Xcode 实践，并建议改读 [Develop in Swift Tutorials](https://developer.apple.com/tutorials/develop-in-swift/)。下面仍保留原教程的知识结构；示例尽量使用现代写法。阅读旧项目时尤其注意：`NavigationView` 通常改用 `NavigationStack` / `NavigationSplitView`，`PreviewProvider` 可改用 `#Preview`；iOS 17+ 的新项目可优先考虑 Observation（`@Observable`），但 `ObservableObject` 系列 API 仍能使用。
+本节整理自 Apple 的 [Learning SwiftUI](https://developer.apple.com/tutorials/swiftui-concepts) 与 [Exploring SwiftUI Sample Apps](https://developer.apple.com/tutorials/sample-apps) 两条学习路径。目标是用“核心知识 → 最小示例 → 原文入口”的形式快速复习，而不是逐步照抄教程。
+::
+
+::warning
+[**版本提示（2026-09-02）**]{.mb-2 .block}
+
+Apple 已在这两条路径顶部标注：内容不再代表最新的 SwiftUI 或 Xcode 实践，并建议改读 [Develop in Swift Tutorials](https://developer.apple.com/tutorials/develop-in-swift/)。下面仍保留原教程的知识结构；示例尽量使用现代写法。阅读旧项目时尤其注意：`NavigationView` 通常改用 `NavigationStack` / `NavigationSplitView`，`PreviewProvider` 可改用 `#Preview`；iOS 17+ 的新项目可优先考虑 Observation（`@Observable`），但 `ObservableObject` 系列 API 仍能使用。
+::
 
 ### 快速学习地图
 
@@ -539,8 +545,11 @@ LazyVGrid(columns: columns) {
 }
 ```
 
-> [!note] 现代实践
-> 从系统照片库选择图片时，优先查看 [PhotosPicker](https://developer.apple.com/documentation/photosui/photospicker)，不要直接把网络图片的 `AsyncImage` 模式套到 PhotoKit 资源上。
+::note
+[**现代实践**]{.mb-2 .block}
+
+从系统照片库选择图片时，优先查看 [PhotosPicker](https://developer.apple.com/documentation/photosui/photospicker)，不要直接把网络图片的 `AsyncImage` 模式套到 PhotoKit 资源上。
+::
 
 文档出处：[Image Gallery](https://developer.apple.com/tutorials/sample-apps/imagegallery)
 
@@ -681,8 +690,11 @@ Image(systemName: "heart.fill")
 
 #### Chapter 5：Capturing and Displaying Photos
 
-> [!warning] 权限与设备
-> 相机与照片库流程涉及隐私权限、硬件和系统资源。必须配置相应用途说明，并在真机验证授权被拒、受限、切换前后摄像头、进入后台等情况。实现前同时查阅当前版本的 [AVFoundation](https://developer.apple.com/documentation/avfoundation) 与 [PhotoKit](https://developer.apple.com/documentation/photokit) 文档。
+::warning
+[**权限与设备**]{.mb-2 .block}
+
+相机与照片库流程涉及隐私权限、硬件和系统资源。必须配置相应用途说明，并在真机验证授权被拒、受限、切换前后摄像头、进入后台等情况。实现前同时查阅当前版本的 [AVFoundation](https://developer.apple.com/documentation/avfoundation) 与 [PhotoKit](https://developer.apple.com/documentation/photokit) 文档。
+::
 
 ##### 1. Previewing the Camera Output
 
@@ -784,8 +796,9 @@ let augmentations: [ImageAugmentation] = [
 ]
 ```
 
-> [!note]
-> 上面的 `ImageAugmentation` 是用于记忆数据增强思路的示意类型，不是 Swift 标准库 API；实际训练请使用 Create ML 或当前训练工具提供的增强选项。
+::note
+上面的 `ImageAugmentation` 是用于记忆数据增强思路的示意类型，不是 Swift 标准库 API；实际训练请使用 Create ML 或当前训练工具提供的增强选项。
+::
 
 文档出处：[Creating Your Own Machine Learning Dataset](https://developer.apple.com/tutorials/sample-apps/getstartedwithmachinelearning-createmldataset)
 

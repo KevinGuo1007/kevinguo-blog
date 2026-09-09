@@ -30,6 +30,8 @@ export default defineNuxtConfig({
   icon: {
     clientBundle: {
       icons: [
+        "lucide:chevron-up",
+        "lucide:list",
         "lucide:tag",
         "simple-icons:github",
         "simple-icons:x",

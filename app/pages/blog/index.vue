@@ -96,7 +96,7 @@ useSeoMeta({
         id="blog-tag-filter"
         v-model="selectedTags"
         icon="i-lucide-tag"
-        size="sm"
+        size="md"
         variant="outline"
         :placeholder="$t('blog.filterPlaceholder')"
         class="w-full"
@@ -109,7 +109,7 @@ useSeoMeta({
           :label="tag"
           color="neutral"
           variant="soft"
-          size="sm"
+          size="xs"
           icon="i-lucide-plus"
           @click="selectTag(tag)"
         />
@@ -134,10 +134,7 @@ useSeoMeta({
         <template #description>
           <p>{{ article.description }}</p>
 
-          <div
-            v-if="article.tags?.length"
-            class="mt-3 flex flex-wrap gap-1.5"
-          >
+          <div v-if="article.tags?.length" class="mt-3 flex flex-wrap gap-1.5">
             <UBadge
               v-for="tag in article.tags ?? []"
               :key="tag"
