@@ -2,8 +2,8 @@
 const { t } = useI18n();
 
 useSeoMeta({
-  title: () => t("about.title"),
-  description: () => t("about.description"),
+  title: () => t("projects.title"),
+  description: () => t("projects.description"),
 });
 </script>
 
@@ -11,10 +11,10 @@ useSeoMeta({
   <section class="py-12 sm:py-16">
     <div class="max-w-3xl">
       <h1 class="text-3xl font-bold tracking-tight">
-        {{ $t("about.title") }}
+        {{ $t("projects.title") }}
       </h1>
       <p class="mt-4 text-muted">
-        {{ $t("about.description") }}
+        {{ $t("projects.description") }}
       </p>
     </div>
   </section>

@@ -5,9 +5,39 @@
   },
   "nav": {
     "home": "首页",
+    "project": "项目",
     "blog": "博客",
     "tags": "标签",
-    "about": "关于"
+    "about": "关于",
+    "openMenu": "打开导航菜单",
+    "closeMenu": "关闭导航菜单"
+  },
+  "language": {
+    "en": "English",
+    "zh": "中文",
+    "switchTo": "切换至{language}"
+  },
+  "a11y": {
+    "skipToContent": "跳到主要内容",
+    "primaryNavigation": "主导航",
+    "mobileNavigation": "移动端导航"
+  },
+  "footer": {
+    "rights": "保留所有权利。",
+    "builtWith": "使用 Nuxt 构建。"
+  },
+  "search": {
+    "open": "搜索",
+    "close": "关闭搜索",
+    "title": "搜索",
+    "description": "搜索当前语言下的文章。",
+    "placeholder": "搜索文章……",
+    "hint": "输入关键词搜索标题、摘要、正文和标签。",
+    "empty": "没有找到匹配的文章。"
+  },
+  "theme": {
+    "light": "切换至亮色模式",
+    "dark": "切换至暗色模式"
   },
   "home": {
     "eyebrow": "个人博客",
@@ -16,7 +46,12 @@
   "blog": {
     "title": "博客",
     "description": "技术学习、软件开发与实践记录",
-    "empty": "文章列表将在下一步接入 Nuxt Content。"
+    "empty": "文章列表将在下一步接入 Nuxt Content。",
+    "back": "返回博客"
+  },
+  "projects": {
+    "title": "项目",
+    "description": "这里将整理精选项目与开源工作。"
   },
   "tags": {
     "title": "标签",

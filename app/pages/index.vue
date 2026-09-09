@@ -10,9 +10,9 @@ useSeoMeta({
 </script>
 
 <template>
-  <UContainer class="py-20">
+  <section class="py-20 sm:py-28">
     <div class="max-w-2xl">
-      <p class="mb-3 text-sm font-medium text-primary">
+      <p class="mb-3 text-sm font-medium text-muted">
         {{ $t("home.eyebrow") }}
       </p>
 
@@ -22,5 +22,5 @@ useSeoMeta({
         {{ $t("home.description") }}
       </p>
     </div>
-  </UContainer>
+  </section>
 </template>

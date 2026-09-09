@@ -8,12 +8,12 @@ useSeoMeta({
 </script>
 
 <template>
-  <UContainer class="py-12">
+  <section class="py-12 sm:py-16">
     <h1 class="text-3xl font-bold tracking-tight">
       {{ $t("tags.title") }}
     </h1>
     <p class="mt-4 text-muted">
       {{ $t("tags.empty") }}
     </p>
-  </UContainer>
+  </section>
 </template>

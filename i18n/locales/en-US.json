@@ -5,9 +5,39 @@
   },
   "nav": {
     "home": "Home",
+    "project": "Project",
     "blog": "Blog",
     "tags": "Tags",
-    "about": "About"
+    "about": "About",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu"
+  },
+  "language": {
+    "en": "English",
+    "zh": "中文",
+    "switchTo": "Switch to {language}"
+  },
+  "a11y": {
+    "skipToContent": "Skip to content",
+    "primaryNavigation": "Primary navigation",
+    "mobileNavigation": "Mobile navigation"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "builtWith": "Built with Nuxt."
+  },
+  "search": {
+    "open": "Search",
+    "close": "Close search",
+    "title": "Search",
+    "description": "Search articles in the current language.",
+    "placeholder": "Search articles...",
+    "hint": "Type to search titles, descriptions, content and tags.",
+    "empty": "No matching articles found."
+  },
+  "theme": {
+    "light": "Switch to light mode",
+    "dark": "Switch to dark mode"
   },
   "home": {
     "eyebrow": "Personal Blog",
@@ -16,7 +46,12 @@
   "blog": {
     "title": "Blog",
     "description": "Notes on technology, software development and practice",
-    "empty": "The article list will be connected to Nuxt Content next."
+    "empty": "The article list will be connected to Nuxt Content next.",
+    "back": "Back to blog"
+  },
+  "projects": {
+    "title": "Projects",
+    "description": "Selected projects and open-source work will be collected here."
   },
   "tags": {
     "title": "Tags",

@@ -1,2 +1,89 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+
+@source "../../../content/**/*";
+
+@theme static {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+
+  /* Standalone ChatGPT-inspired purple accent palette. */
+  --color-accent-50: #f5f3ff;
+  --color-accent-100: #ede9fe;
+  --color-accent-200: #ddd6fe;
+  --color-accent-300: #c4b5fd;
+  --color-accent-400: #a78bfa;
+  --color-accent-500: #8b5cf6;
+  --color-accent-600: #7c3aed;
+  --color-accent-700: #6d28d9;
+  --color-accent-800: #5b21b6;
+  --color-accent-900: #4c1d95;
+  --color-accent-950: #2e1065;
+  --color-accent: var(--color-accent-600);
+}
+
+:root {
+  --ui-container: 64rem;
+  --ui-radius: 0.5rem;
+
+  --ui-text-dimmed: #a3a3a3;
+  --ui-text-muted: #737373;
+  --ui-text-toned: #525252;
+  --ui-text: #404040;
+  --ui-text-highlighted: #171717;
+  --ui-text-inverted: #ffffff;
+
+  --ui-bg: #ffffff;
+  --ui-bg-muted: #fafafa;
+  --ui-bg-elevated: #f5f5f5;
+  --ui-bg-accented: #e5e5e5;
+  --ui-bg-inverted: #171717;
+
+  --ui-border: #e5e5e5;
+  --ui-border-muted: #eeeeee;
+  --ui-border-accented: #d4d4d4;
+  --ui-border-inverted: #171717;
+
+  color-scheme: light;
+}
+
+.dark {
+  --color-accent: var(--color-accent-400);
+
+  --ui-text-dimmed: #525252;
+  --ui-text-muted: #a3a3a3;
+  --ui-text-toned: #d4d4d4;
+  --ui-text: #e5e5e5;
+  --ui-text-highlighted: #fafafa;
+  --ui-text-inverted: #050505;
+
+  --ui-bg: #050505;
+  --ui-bg-muted: #0a0a0a;
+  --ui-bg-elevated: #111111;
+  --ui-bg-accented: #1f1f1f;
+  --ui-bg-inverted: #fafafa;
+
+  --ui-border: #262626;
+  --ui-border-muted: #1a1a1a;
+  --ui-border-accented: #404040;
+  --ui-border-inverted: #fafafa;
+
+  color-scheme: dark;
+}
+
+html {
+  overflow-y: scroll;
+  background: var(--ui-bg);
+}
+
+body {
+  background: var(--ui-bg);
+  color: var(--ui-text);
+  font-size: 1rem;
+  line-height: 1.7;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-accent) 24%, transparent);
+}
