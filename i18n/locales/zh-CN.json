@@ -53,7 +53,8 @@
     "filterPlaceholder": "输入标签并按回车搜索",
     "noMatches": "没有找到包含所选标签的文章。",
     "empty": "暂时还没有文章。",
-    "back": "返回博客"
+    "back": "返回博客",
+    "toc": "本页目录"
   },
   "projects": {
     "title": "项目",

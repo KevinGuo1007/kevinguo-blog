@@ -37,7 +37,32 @@ export default defineNuxtConfig({
         "simple-icons:linkedin",
         "simple-icons:bilibili",
         "simple-icons:tiktok",
+        "simple-icons:swift",
       ],
+    },
+  },
+
+  content: {
+    build: {
+      markdown: {
+        highlight: {
+          langs: [
+            "bash",
+            "css",
+            "html",
+            "js",
+            "jsx",
+            "json",
+            "md",
+            "mdc",
+            "swift",
+            "ts",
+            "tsx",
+            "vue",
+            "yaml",
+          ],
+        },
+      },
     },
   },
 

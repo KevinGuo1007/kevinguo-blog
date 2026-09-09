@@ -53,7 +53,8 @@
     "filterPlaceholder": "Type a tag and press Enter",
     "noMatches": "No posts contain all of the selected tags.",
     "empty": "No posts yet.",
-    "back": "Back to blog"
+    "back": "Back to blog",
+    "toc": "On this page"
   },
   "projects": {
     "title": "Projects",
