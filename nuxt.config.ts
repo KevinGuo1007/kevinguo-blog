@@ -68,6 +68,16 @@ export default defineNuxtConfig({
     },
   },
 
+  // The site is deployed as static output, so OG images should be generated
+  // during development/prerendering instead of relying on a server runtime.
+  ogImage: {
+    zeroRuntime: true,
+  },
+
+  sitemap: {
+    zeroRuntime: true,
+  },
+
   i18n: {
     baseUrl: "https://kevinguo.ink",
     defaultLocale: "en",

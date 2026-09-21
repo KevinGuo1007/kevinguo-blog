@@ -32,10 +32,12 @@
     "title": "Search",
     "description": "Search articles in the current language.",
     "placeholder": "Search articles...",
+    "loading": "Loading search index...",
     "hint": "Type to search titles, descriptions, content and tags.",
     "empty": "No matching articles found."
   },
   "theme": {
+    "toggle": "Toggle color mode",
     "light": "Switch to light mode",
     "dark": "Switch to dark mode"
   },

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const colorMode = useColorMode();
-const { t } = useI18n();
 
 const isDark = computed(() => colorMode.value === "dark");
 
@@ -10,24 +9,16 @@ function toggleColorMode() {
 </script>
 
 <template>
-  <ClientOnly>
-    <UButton
-      color="neutral"
-      variant="ghost"
-      size="sm"
-      square
-      class="rounded-full"
-      :aria-label="isDark ? t('theme.light') : t('theme.dark')"
-      @click="toggleColorMode"
-    >
-      <UIcon
-        :name="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
-        class="size-4"
-      />
-    </UButton>
-
-    <template #fallback>
-      <span class="block size-8" />
-    </template>
-  </ClientOnly>
+  <UButton
+    color="neutral"
+    variant="ghost"
+    size="sm"
+    square
+    class="rounded-full"
+    :aria-label="$t('theme.toggle')"
+    @click="toggleColorMode"
+  >
+    <UIcon name="i-lucide-sun" class="hidden size-4 dark:block" />
+    <UIcon name="i-lucide-moon" class="size-4 dark:hidden" />
+  </UButton>
 </template>

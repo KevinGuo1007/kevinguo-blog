@@ -191,7 +191,7 @@ draft: false
 
 ## 7. 搜索与标签
 
-首版使用 Nuxt Content 的 `queryCollectionSearchSections` 生成搜索数据，Fuse.js 在浏览器中完成搜索。
+首版使用 Nuxt Content 的 `queryCollectionSearchSections` 生成搜索数据，Fuse.js 在浏览器中完成搜索。搜索模块在用户首次打开弹窗时才加载并生成当前语言索引，不进入普通页面的 SSR payload。
 
 规则：
 
@@ -202,6 +202,8 @@ draft: false
 - 搜索标题、摘要、正文和标签。
 - 两种语言索引分开生成并按需加载。
 - `draft: true` 的文章不进入索引。
+
+内容提交前由 `pnpm content:check` 校验集合内 slug、`translationKey` 的唯一性、译文结构化字段和本地图片路径；`pnpm check` 与 GitHub Actions CI 都会执行这项校验。
 
 文章数量或搜索索引明显增大后，再评估 Pagefind，不在首版提前引入。
 

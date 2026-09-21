@@ -7,6 +7,7 @@ const selectedTags = ref<string[]>([]);
 
 const { data: articles } = await useAsyncData(blogListKey, () =>
   queryCollection(collection.value)
+    .select("id", "title", "description", "slug", "date", "image", "tags")
     .where("draft", "=", false)
     .order("date", "DESC")
     .all(),

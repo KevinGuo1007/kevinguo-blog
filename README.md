@@ -51,11 +51,12 @@ pnpm dev
 
 ```bash
 pnpm dev        # 启动开发服务器
-pnpm lint       # ESLint 检查
-pnpm typecheck  # Vue 与 TypeScript 类型检查
-pnpm generate   # 静态生成站点
-pnpm preview    # 预览静态生成结果
-pnpm check      # 依次运行 lint、typecheck 和 generate
+pnpm content:check # 内容关系、重复字段和图片路径检查
+pnpm lint          # ESLint 检查
+pnpm typecheck     # Vue 与 TypeScript 类型检查
+pnpm generate      # 静态生成站点
+pnpm preview       # 预览静态生成结果
+pnpm check         # 运行全部内容、代码与静态生成检查
 ```
 
 提交代码前至少运行：
@@ -176,7 +177,7 @@ app/pages/blog/[slug].vue
 
 ### 5. 实现搜索
 
-通过 `queryCollectionSearchSections()` 获取当前语言搜索数据，使用 Fuse.js 在浏览器中搜索，并支持 `Cmd/Ctrl + K` 打开搜索弹窗。
+通过 `queryCollectionSearchSections()` 获取当前语言搜索数据，使用 Fuse.js 在浏览器中搜索，并支持 `Cmd/Ctrl + K` 打开搜索弹窗。搜索弹窗和索引只在首次打开时加载，避免把全文索引写入每个页面的首屏 payload。
 
 完成每一个阶段后运行 `pnpm check`，避免问题累积到部署阶段。
 
@@ -186,10 +187,10 @@ app/pages/blog/[slug].vue
 
 ### 内容与多语言
 
-- [ ] 实现重复 slug、标签、图片路径和翻译映射校验脚本
-- [ ] 增加 `pnpm content:check`
-- [ ] 校验每篇中文译文都存在相同 `translationKey` 的英文原文
-- [ ] 在语言切换器中仅链接真实存在的文章译文
+- [x] 实现重复 slug、标签、图片路径和翻译映射校验脚本
+- [x] 增加 `pnpm content:check`
+- [x] 校验中文译文的英文原文关系（现有 Swift 笔记作为显式已知欠账保留警告）
+- [x] 在语言切换器中仅链接真实存在的文章译文
 - [ ] 约定英文原文更新后同步检查中文译文的人工维护流程
 
 ### SEO 与静态生成
@@ -198,12 +199,12 @@ app/pages/blog/[slug].vue
 - [ ] 为各页面接入 `useLocaleHead()` 和完整 SEO 元数据
 - [ ] 显式收集双语文章和标签的 Nitro prerender 路由
 - [ ] 将有效文章和标签动态路由接入 Sitemap
-- [ ] 只为真实存在的译文输出 `hreflang`
+- [x] 只为真实存在的译文输出 `hreflang`
 - [ ] 校验草稿不会进入页面、搜索、Sitemap 和静态产物
 
 ### 工程与部署
 
-- [ ] 创建 GitHub Actions `ci.yml`
+- [x] 创建 GitHub Actions `ci.yml`
 - [ ] 创建 Vercel Preview 与 Production 部署工作流
 - [ ] 配置 `VERCEL_TOKEN`、`VERCEL_ORG_ID` 和 `VERCEL_PROJECT_ID`
 - [ ] 关闭 Vercel 原生 Git 自动部署，避免重复部署

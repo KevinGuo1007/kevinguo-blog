@@ -46,27 +46,26 @@ const formattedDate = computed(() =>
 const { data: articleSurround } = await useAsyncData(
   () => `blog-surround-${locale.value}-${slug.value}`,
   () =>
-    queryCollectionItemSurroundings(
-      collection.value,
-      article.value!.path,
-      { fields: ["description", "slug"] },
-    )
+    queryCollectionItemSurroundings(collection.value, article.value!.path, {
+      fields: ["description", "slug"],
+    })
       .where("draft", "=", false)
       .order("date", "ASC"),
   { watch: [collection, slug] },
 );
 
-const surround = computed(() =>
-  // UContentSurround uses null entries to keep first/last post cards aligned,
-  // although its public prop type currently omits those placeholders.
-  (articleSurround.value ?? []).map((item) =>
-    item
-      ? {
-          ...item,
-          path: localePath(`/blog/${item.slug}`),
-        }
-      : null,
-  ) as ContentNavigationItem[],
+const surround = computed(
+  () =>
+    // UContentSurround uses null entries to keep first/last post cards aligned,
+    // although its public prop type currently omits those placeholders.
+    (articleSurround.value ?? []).map((item) =>
+      item
+        ? {
+            ...item,
+            path: localePath(`/blog/${item.slug}`),
+          }
+        : null,
+    ) as ContentNavigationItem[],
 );
 
 const tocLinks = computed(() => article.value?.body?.toc?.links ?? []);
@@ -117,12 +116,23 @@ function scrollToTop() {
         <p class="text-sm text-muted">
           {{ formattedDate }}
         </p>
-        <h1 class="mt-3 text-4xl font-semibold tracking-tight text-highlighted sm:text-5xl">
+        <h1
+          class="mt-3 text-4xl font-semibold tracking-tight text-highlighted sm:text-5xl"
+        >
           {{ article.title }}
         </h1>
         <p class="mt-5 text-lg text-muted">
           {{ article.description }}
         </p>
+        <ul
+          v-if="article.tags?.length"
+          class="mt-5 flex flex-wrap gap-2"
+          aria-label="Article tags"
+        >
+          <li v-for="tag in article.tags" :key="tag">
+            <UBadge :label="tag" color="neutral" variant="subtle" size="md" />
+          </li>
+        </ul>
       </header>
 
       <UPageBody class="prose prose-neutral dark:prose-invert max-w-none">
