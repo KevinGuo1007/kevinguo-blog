@@ -15,6 +15,29 @@
 - Fuse.js
 - pnpm
 
+## VS Code 开发环境
+
+本项目使用一组尽量精简、职责明确的 VS Code 扩展。当前建议在本工作区启用：
+
+- `Vue.volar`：为 Vue 单文件组件提供模板、Props 和 TypeScript 语言支持，也是 Nuxt 官方推荐的 VS Code 扩展。
+- `dbaeumer.vscode-eslint`：读取项目的 Nuxt ESLint Flat Config，并在编辑器中提供代码诊断。
+- `bradlc.vscode-tailwindcss`：为 Tailwind CSS 4 的工具类以及 `@theme`、`@source` 等语法提供补全和检查。
+- `Nuxt.mdc`：为 Nuxt Content 的 Markdown Components（MDC）语法提供高亮、折叠和补全。
+- `Lokalise.i18n-ally`：浏览和检查 `i18n/locales/` 下的中英文界面文案。
+- `antfu.iconify`：预览和补全项目使用的 `lucide:*`、`simple-icons:*` 图标名称。
+- `GitHub.vscode-github-actions`：编辑并校验 `.github/workflows/ci.yml`。
+- `redhat.vscode-yaml`：提供 YAML 语法、Schema 校验和补全。
+- `alexcvzz.vscode-sqlite`：按需检查 Nuxt Content 生成的 `.data/content/contents.sqlite`。
+
+仓库的 `.vscode/settings.json` 已指定 i18n 文案目录和英文源语言。扩展只负责编辑器反馈，最终结果仍以仓库命令为准：代码问题运行 `pnpm lint` 和 `pnpm typecheck`，内容关系及 Frontmatter 运行 `pnpm content:check`，提交前运行 `pnpm check`。
+
+以下扩展在本工作区禁用，以避免重复提示或使用错误的运行方式：
+
+- `ms-vscode.vscode-typescript-next`：项目使用 `package.json` 固定的工作区 TypeScript，不使用 Nightly 版本。
+- `ritwickdey.liveserver`：Nuxt 页面必须通过 `pnpm dev` 启动，不能用静态文件服务器代替。
+- `hollowtree.vue-snippets`、`sdras.vue-vscode-snippets`：避免多个 Vue 代码片段来源产生重复候选项。
+- `formulahendry.auto-close-tag`、`formulahendry.auto-rename-tag`：避免与 VS Code 和 Vue 扩展已有的标签编辑能力重叠。
+
 ## 环境要求
 
 - Node.js 24.x，具体版本见 `.node-version`
