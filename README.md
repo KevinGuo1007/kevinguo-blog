@@ -101,8 +101,8 @@ content/
 ├── en-US/blog/                # 英文原始文章
 └── zh-CN/blog/                # 手工维护的中文译文
 i18n/locales/
-├── zh-CN.json                 # 中文 UI 文案
-└── en-US.json                 # 英文 UI 文案
+├── zh.json                    # 中文 UI 文案（language: zh-CN）
+└── en.json                    # 英文 UI 文案（language: en-US）
 public/                        # 不经构建处理的公开资源
 content.config.ts              # Content 集合与 Frontmatter Schema
 nuxt.config.ts                 # Nuxt 与模块配置

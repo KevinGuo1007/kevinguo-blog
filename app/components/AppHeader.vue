@@ -14,7 +14,7 @@ const navItems = computed<NavigationMenuItem[]>(() => [
 
 <template>
   <header
-    class="fixed top-2 left-1/2 z-50 w-[calc(100vw-1rem)] -translate-x-1/2 sm:top-4 sm:w-[30rem]"
+    class="fixed top-2 left-1/2 z-50 w-[calc(100vw-1rem)] -translate-x-1/2 sm:top-4 sm:w-120"
   >
     <UNavigationMenu
       :items="navItems"

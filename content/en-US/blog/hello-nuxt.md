@@ -4,12 +4,13 @@ description: A sample article for validating the Nuxt Content workflow
 slug: hello-nuxt
 translationKey: hello-nuxt
 date: 2026-09-06
+updated: 2026-09-22
 tags:
   - nuxt
   - vue
   - web
-featured: true
-draft: false
+featured: false
+draft: true
 ---
 
 # Building a Personal Blog with Nuxt

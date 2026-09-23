@@ -2,6 +2,36 @@
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
 
+  app: {
+    head: {
+      link: [
+        {
+          rel: "icon",
+          type: "image/x-icon",
+          sizes: "32x32",
+          href: "/favicon.ico",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "32x32",
+          href: "/favicon-32x32.png",
+        },
+        {
+          rel: "icon",
+          type: "image/png",
+          sizes: "16x16",
+          href: "/favicon-16x16.png",
+        },
+        {
+          rel: "apple-touch-icon",
+          sizes: "180x180",
+          href: "/apple-touch-icon.png",
+        },
+      ],
+    },
+  },
+
   site: {
     url: "https://kevinguo.ink",
     name: "Kevin Guo's Blog",
@@ -31,8 +61,12 @@ export default defineNuxtConfig({
     clientBundle: {
       icons: [
         "lucide:chevron-up",
+        "lucide:file-question",
+        "lucide:house",
         "lucide:list",
+        "lucide:newspaper",
         "lucide:tag",
+        "lucide:triangle-alert",
         "simple-icons:github",
         "simple-icons:x",
         "simple-icons:youtube",
@@ -88,13 +122,13 @@ export default defineNuxtConfig({
         code: "en",
         language: "en-US",
         name: "English",
-        file: "en-US.json",
+        file: "en.json",
       },
       {
         code: "zh",
         language: "zh-CN",
         name: "简体中文",
-        file: "zh-CN.json",
+        file: "zh.json",
       },
     ],
 

@@ -2,12 +2,10 @@
 import type { DropdownMenuItem } from "@nuxt/ui";
 
 const { t } = useI18n();
-const colorMode = useColorMode();
 const { open: isSearchOpen } = useContentSearch();
 const { targetLabel, targetPath } = await useLocaleSwitchTarget();
+const { isDark, startViewTransition } = useColorModeTransition();
 const isMenuOpen = ref(false);
-
-const isDark = computed(() => colorMode.value === "dark");
 
 function openSearch() {
   isMenuOpen.value = false;
@@ -44,9 +42,7 @@ const items = computed<DropdownMenuItem[]>(() => [
   {
     label: isDark.value ? t("theme.light") : t("theme.dark"),
     icon: isDark.value ? "i-lucide-sun" : "i-lucide-moon",
-    onSelect: () => {
-      colorMode.preference = isDark.value ? "light" : "dark";
-    },
+    onSelect: startViewTransition,
   },
 ]);
 </script>

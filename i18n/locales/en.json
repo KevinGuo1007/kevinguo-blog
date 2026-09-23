@@ -72,5 +72,13 @@
   "about": {
     "title": "About",
     "description": "A longer personal introduction will be added here."
+  },
+  "error": {
+    "notFoundTitle": "Page not found",
+    "notFoundDescription": "The page may have moved, been removed, or never existed.",
+    "genericTitle": "Something went wrong",
+    "genericDescription": "An unexpected error occurred. Please return home or try the blog.",
+    "backHome": "Back to home",
+    "browseBlog": "Browse the blog"
   }
 }

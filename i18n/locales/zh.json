@@ -72,5 +72,13 @@
   "about": {
     "title": "关于",
     "description": "这里将展示更完整的个人介绍。"
+  },
+  "error": {
+    "notFoundTitle": "页面未找到",
+    "notFoundDescription": "这个页面可能已被移动、删除，或者从未存在。",
+    "genericTitle": "页面出现错误",
+    "genericDescription": "发生了意外错误，请返回首页或继续浏览博客。",
+    "backHome": "返回首页",
+    "browseBlog": "浏览博客"
   }
 }

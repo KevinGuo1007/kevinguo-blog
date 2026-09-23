@@ -111,8 +111,8 @@
 │   └── zh-CN/blog/          # 手工维护的中文译文
 ├── i18n/
 │   └── locales/
-│       ├── en-US.json
-│       └── zh-CN.json
+│       ├── en.json
+│       └── zh.json
 ├── public/
 │   └── images/
 ├── scripts/
