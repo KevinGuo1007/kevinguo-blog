@@ -1,11 +1,30 @@
 <script setup lang="ts">
 const socialLinks = [
-  { label: "GitHub", icon: "i-simple-icons-github", to: "" },
-  { label: "X", icon: "i-simple-icons-x", to: "" },
-  { label: "YouTube", icon: "i-simple-icons-youtube", to: "" },
-  { label: "LinkedIn", icon: "i-simple-icons-linkedin", to: "" },
-  { label: "Bilibili", icon: "i-simple-icons-bilibili", to: "" },
-  { label: "抖音", icon: "i-simple-icons-tiktok", to: "" },
+  {
+    label: "GitHub",
+    icon: "i-simple-icons-github",
+    to: "https://github.com/KevinGuo1007",
+  },
+  {
+    label: "X",
+    icon: "i-simple-icons-x",
+    to: "https://x.com/KevinGuo10070",
+  },
+  {
+    label: "YouTube",
+    icon: "i-simple-icons-youtube",
+    to: "https://www.youtube.com/@郭越齐",
+  },
+  {
+    label: "LinkedIn",
+    icon: "i-simple-icons-linkedin",
+    to: "https://www.linkedin.com/in/越齐-郭-681796355/",
+  },
+  {
+    label: "Bilibili",
+    icon: "i-simple-icons-bilibili",
+    to: "https://space.bilibili.com/39395433?spm_id_from=333.1007.0.0",
+  },
 ];
 
 const { t } = useI18n();
@@ -31,25 +50,35 @@ useSeoMeta({
   >
     <template #header>
       <h1
+        data-animate
         class="text-5xl font-bold tracking-tight text-highlighted sm:text-7xl lg:text-8xl"
+        style="--stagger: 1"
       >
         Kevin Guo
       </h1>
 
       <p
+        data-animate
         class="mt-6 font-mono text-xl font-medium tracking-tight text-accent sm:text-2xl"
+        style="--stagger: 2"
       >
         {{ t("home.role") }}
       </p>
 
-      <p class="mt-8 max-w-3xl text-lg/8 text-muted sm:text-xl/9">
+      <p
+        data-animate
+        class="mt-8 max-w-3xl text-lg/8 text-muted sm:text-xl/9"
+        style="--stagger: 3"
+      >
         {{ t("home.introduction") }}
       </p>
     </template>
 
     <template #body>
       <nav
+        data-animate
         class="flex flex-wrap items-center gap-3 sm:gap-4"
+        style="--stagger: 4"
         :aria-label="t('home.socialLinksLabel')"
       >
         <UTooltip
@@ -81,6 +110,7 @@ useSeoMeta({
     </template>
 
     <NuxtImg
+      data-animate
       src="/images/profile/avatar-512x512.png"
       alt="Kevin Guo"
       width="512"
@@ -89,6 +119,7 @@ useSeoMeta({
       loading="eager"
       fetchpriority="high"
       class="mx-auto aspect-square w-full max-w-40 rounded-full object-cover shadow-xl shadow-neutral-950/10 ring-1 ring-default sm:max-w-48 lg:max-w-56 dark:shadow-black/30"
+      style="--stagger: 2"
     />
   </UPageHero>
 </template>

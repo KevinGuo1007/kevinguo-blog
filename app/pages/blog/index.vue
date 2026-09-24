@@ -82,11 +82,19 @@ useSeoMeta({
 
 <template>
   <section class="py-12 sm:py-16">
-    <h1 class="text-3xl font-bold tracking-tight">
+    <h1
+      data-animate
+      class="text-3xl font-bold tracking-tight"
+      style="--stagger: 1"
+    >
       {{ $t("blog.title") }}
     </h1>
 
-    <div class="mt-8 max-w-2xl">
+    <div
+      data-animate
+      class="mt-8 max-w-2xl"
+      style="--stagger: 2"
+    >
       <label
         for="blog-tag-filter"
         class="mb-2 block text-sm font-medium text-highlighted"
@@ -117,7 +125,11 @@ useSeoMeta({
       </div>
     </div>
 
-    <div v-if="filteredArticles.length" class="mt-10 space-y-6">
+    <div
+      v-if="filteredArticles.length"
+      class="slide-enter-content mt-10 space-y-6"
+      style="--enter-start: 160ms"
+    >
       <UBlogPost
         v-for="article in filteredArticles"
         :key="article.id"
@@ -149,7 +161,12 @@ useSeoMeta({
       </UBlogPost>
     </div>
 
-    <p v-else class="mt-4 text-muted">
+    <p
+      v-else
+      data-animate
+      class="mt-4 text-muted"
+      style="--stagger: 3"
+    >
       {{ selectedTags.length ? $t("blog.noMatches") : $t("blog.empty") }}
     </p>
   </section>

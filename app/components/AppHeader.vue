@@ -17,11 +17,13 @@ const navItems = computed<NavigationMenuItem[]>(() => [
     class="fixed top-2 left-1/2 z-50 w-[calc(100vw-1rem)] -translate-x-1/2 sm:top-4 sm:w-120"
   >
     <UNavigationMenu
+      data-animate
       :items="navItems"
       :aria-label="$t('a11y.primaryNavigation')"
       color="neutral"
       variant="link"
       class="w-full rounded-full border border-default/70 bg-default/85 px-1.5 shadow-lg shadow-neutral-950/5 backdrop-blur-xl dark:shadow-black/25 sm:px-3"
+      style="--enter-start: 40ms"
       :ui="{
         root: '[&>div:first-child]:flex-1',
         list: 'w-full',

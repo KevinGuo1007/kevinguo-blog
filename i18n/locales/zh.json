@@ -23,8 +23,7 @@
     "mobileNavigation": "移动端导航"
   },
   "footer": {
-    "rights": "保留所有权利。",
-    "builtWith": "使用 Nuxt 构建。"
+    "rights": "保留所有权利。"
   },
   "search": {
     "open": "搜索",

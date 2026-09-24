@@ -50,10 +50,12 @@ async function recover(path: string) {
       <AppHeader />
 
       <UError
+        data-animate
         :error="displayError"
         :icon="errorIcon"
         :clear="false"
         class="min-h-0 flex-1 px-4 py-24 sm:py-32"
+        style="--stagger: 1"
       >
         <template #links>
           <UButton

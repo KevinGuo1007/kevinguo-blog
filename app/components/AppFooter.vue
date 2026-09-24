@@ -17,9 +17,5 @@ const currentYear = new Date().getFullYear();
         {{ $t("footer.rights") }}
       </p>
     </template>
-
-    <template #right>
-      <p>{{ $t("footer.builtWith") }}</p>
-    </template>
   </UFooter>
 </template>

@@ -23,8 +23,7 @@
     "mobileNavigation": "Mobile navigation"
   },
   "footer": {
-    "rights": "All rights reserved.",
-    "builtWith": "Built with Nuxt."
+    "rights": "All rights reserved."
   },
   "search": {
     "open": "Search",

@@ -100,12 +100,14 @@ function scrollToTop() {
   >
     <div>
       <UButton
+        data-animate
         :to="localePath('/blog')"
         :label="$t('blog.back')"
         color="neutral"
         variant="ghost"
         size="sm"
         class="-ml-2"
+        style="--stagger: 1"
       >
         <template #leading>
           <span aria-hidden="true">←</span>
@@ -113,20 +115,28 @@ function scrollToTop() {
       </UButton>
 
       <header class="mt-8 border-b border-default pb-8">
-        <p class="text-sm text-muted">
+        <p data-animate class="text-sm text-muted" style="--stagger: 2">
           {{ formattedDate }}
         </p>
         <h1
+          data-animate
           class="mt-3 text-4xl font-semibold tracking-tight text-highlighted sm:text-5xl"
+          style="--stagger: 3"
         >
           {{ article.title }}
         </h1>
-        <p class="mt-5 text-lg text-muted">
+        <p
+          data-animate
+          class="mt-5 text-lg text-muted"
+          style="--stagger: 4"
+        >
           {{ article.description }}
         </p>
         <ul
           v-if="article.tags?.length"
+          data-animate
           class="mt-5 flex flex-wrap gap-2"
+          style="--stagger: 5"
           aria-label="Article tags"
         >
           <li v-for="tag in article.tags" :key="tag">
@@ -136,18 +146,29 @@ function scrollToTop() {
       </header>
 
       <UPageBody class="prose prose-neutral dark:prose-invert max-w-none">
-        <ContentRenderer :value="article" />
+        <ContentRenderer
+          :value="article"
+          class="slide-enter-content"
+          style="--enter-start: 320ms"
+        />
 
-        <UContentSurround :surround="surround" class="not-prose" />
+        <UContentSurround
+          data-animate
+          :surround="surround"
+          class="not-prose"
+          style="--enter-start: 400ms"
+        />
       </UPageBody>
     </div>
 
     <template #right>
       <UContentToc
+        data-animate
         :title="$t('blog.toc')"
         :links="tocLinks"
         highlight
         class="hidden lg:flex"
+        style="--stagger: 4"
         :ui="{ linkText: 'whitespace-normal leading-5' }"
       />
     </template>

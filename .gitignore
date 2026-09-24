@@ -10,6 +10,10 @@ dist
 node_modules
 .pnpm-store
 
+# Project-local agent skills
+.agents/skills/
+skills-lock.json
+
 # Logs
 logs
 *.log
