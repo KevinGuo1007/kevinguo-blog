@@ -13,7 +13,11 @@
     "content:check": "node scripts/content-check.ts",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
+    "github:languages": "node --env-file-if-exists=.env scripts/generate-github-languages.ts",
     "lint": "eslint .",
+    "prebuild": "pnpm github:languages --mode=build",
+    "predev": "pnpm github:languages --mode=dev",
+    "pregenerate": "pnpm github:languages --mode=build",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "typecheck": "nuxt typecheck"
@@ -40,6 +44,7 @@
   "devDependencies": {
     "@nuxt/eslint": "^1.17.0",
     "eslint": "^10.10.0",
+    "simple-icons": "^16.32.0",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.2.5",
     "yaml": "^2.9.0"

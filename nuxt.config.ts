@@ -1,3 +1,10 @@
+import githubLanguageStats from "./app/generated/github-language-stats.json";
+import type { GitHubLanguageStats } from "./shared/types/github-language-stats";
+
+const githubLanguageIcons = (githubLanguageStats as GitHubLanguageStats).items.map(
+  (language) => language.icon,
+);
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
@@ -74,6 +81,7 @@ export default defineNuxtConfig({
         "simple-icons:bilibili",
         "simple-icons:tiktok",
         "simple-icons:swift",
+        ...githubLanguageIcons,
       ],
     },
   },

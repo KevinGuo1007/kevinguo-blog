@@ -1,0 +1,50 @@
+{
+  "username": "KevinGuo1007",
+  "repositoryCount": 9,
+  "totalBytes": 309924,
+  "items": [
+    {
+      "label": "TypeScript",
+      "value": 133382,
+      "percentage": 43.037,
+      "icon": "simple-icons:typescript",
+      "color": "#3178c6"
+    },
+    {
+      "label": "Astro",
+      "value": 62314,
+      "percentage": 20.1062,
+      "icon": "simple-icons:astro",
+      "color": "#ff5a03"
+    },
+    {
+      "label": "Vue",
+      "value": 59830,
+      "percentage": 19.3047,
+      "icon": "simple-icons:vuedotjs",
+      "color": "#41b883"
+    },
+    {
+      "label": "TeX",
+      "value": 16292,
+      "percentage": 5.2568,
+      "icon": "simple-icons:latex",
+      "color": "#3D6117"
+    },
+    {
+      "label": "Python",
+      "value": 15328,
+      "percentage": 4.9457,
+      "icon": "simple-icons:python",
+      "color": "#3572A5"
+    },
+    {
+      "label": "Other",
+      "value": 22778,
+      "percentage": 7.3495,
+      "icon": "lucide:shapes",
+      "color": "#8b949e"
+    }
+  ],
+  "updatedAt": "2026-09-25T14:27:55.943Z"
+}
