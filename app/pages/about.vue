@@ -177,7 +177,9 @@ const contactLinks = [
       }"
     >
       <template #body>
-        <div class="mx-auto w-full max-w-3xl">
+        <div class="mx-auto w-full max-w-5xl">
+          <GitHubContributions class="mb-12" />
+
           <UProgressGroup
             v-if="githubLanguageItems.length"
             class="mx-auto w-full max-w-96"
