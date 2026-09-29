@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { en, zh_cn } from "@nuxt/ui/locale";
+
+const { locale } = useI18n();
+const uiLocale = computed(() => (locale.value === "zh" ? zh_cn : en));
 const i18nHead = useLocaleHead({ seo: true });
 const { isArticleRoute, targetLocale, targetPath } =
   await useLocaleSwitchTarget();
@@ -59,7 +63,7 @@ useHead(() => ({
 </script>
 
 <template>
-  <UApp>
+  <UApp :locale="uiLocale">
     <NuxtRouteAnnouncer />
 
     <NuxtLayout>

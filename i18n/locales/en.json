@@ -70,7 +70,36 @@
   },
   "about": {
     "title": "About",
-    "description": "A longer personal introduction will be added here."
+    "description": "Learn about Kevin Guo, a software engineer focused on full-stack development, DevOps, cloud infrastructure and AI infrastructure.",
+    "heading": "What about me? 🧐",
+    "tagline": "From building products to building the infrastructure behind them.",
+    "introduction": "Hi, I'm Kevin Guo, a software engineer with a full-stack background who is now moving deeper into DevOps and AI infrastructure.",
+    "fullStackBackground": "I started with full-stack development because many of the projects I worked on required both frontend and backend ownership. Understanding both sides of a product helped me build systems more coherently and maintain consistency across architecture, functionality, and user experience.",
+    "infrastructureJourney": "As I studied operating systems and began deploying my own projects, I realized that building an application is only the first step. Delivering it efficiently, operating it reliably, and scaling it sustainably are equally important. That realization gradually shifted my attention from applications themselves to the infrastructure that supports them. Today, I'm developing my knowledge of cloud infrastructure, CI/CD, developer productivity, containers, Kubernetes, deep learning, and GPU inference clusters while exploring practical paths into DevOps and AI infrastructure.",
+    "vision": "As AI enables more people to become developers, I want to help build the “shovels” they rely on—the tools and infrastructure that allow software to be delivered efficiently, operated reliably, and scaled with confidence.",
+    "community": "I also actively take part in technical events and open-source communities. For me, a community is not only a place to learn, but also a place to exchange ideas, test my understanding against real problems, and contribute alongside other developers.",
+    "outsideCode": "Outside of code, I enjoy exploring technology, photography, and reading. Each gives me a different way to examine problems, document the world, and stay curious.",
+    "blogLink": "Explore my blogs",
+    "contact": {
+      "title": "Get in touch 🔎",
+      "description": "I'm currently open to DevOps Engineer and Infrastructure Engineer opportunities, as well as open-source collaboration and infrastructure-focused projects.",
+      "email": "Email"
+    },
+    "github": {
+      "summary": "{count} contributions in {year}",
+      "oneContributionOn": "{count} contribution on {date}",
+      "contributionsOn": "{count} contributions on {date}",
+      "learnMore": "Learn how we count contributions",
+      "intensity": "Contribution intensity",
+      "less": "Less",
+      "more": "More",
+      "year": "Contribution year",
+      "monday": "Mon",
+      "wednesday": "Wed",
+      "friday": "Fri",
+      "other": "Other",
+      "unavailable": "GitHub language statistics are temporarily unavailable."
+    }
   },
   "error": {
     "notFoundTitle": "Page not found",

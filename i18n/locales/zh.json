@@ -70,7 +70,36 @@
   },
   "about": {
     "title": "关于",
-    "description": "这里将展示更完整的个人介绍。"
+    "description": "了解 Kevin Guo：一名专注于全栈开发、DevOps、云基础设施与 AI 基础设施的软件工程师。",
+    "heading": "关于我 🧐",
+    "tagline": "从构建产品，到构建支撑产品运行的基础设施。",
+    "introduction": "你好，我是 Kevin Guo，一名拥有全栈背景的软件工程师，目前正进一步深入 DevOps 与 AI 基础设施领域。",
+    "fullStackBackground": "我从全栈开发起步，因为参与的许多项目都需要同时负责前端与后端。理解产品的两端，让我能够更连贯地构建系统，并在架构、功能和用户体验之间保持一致。",
+    "infrastructureJourney": "在学习操作系统和开始经常部署项目后，我意识到，构建应用只是第一步。如何高效地交付、可靠地运行，并以可持续的方式扩展，同样重要。这个认识让我逐渐将注意力从应用本身转向支撑应用运行的基础设施。如今，我正在持续学习云基础设施、CI/CD、开发者效率、容器、Kubernetes、深度学习和 GPU 推理集群，并探索走向 DevOps 与 AI 基础设施领域的实践路径。",
+    "vision": "随着 AI 让更多人能够成为开发者，我希望参与打造他们所依赖的“铲子”——那些让软件得以高效交付、可靠运行并自信扩展的工具与基础设施。",
+    "community": "我也积极参与技术活动和开源社区。对我而言，社区不仅是学习的地方，也是交流想法、用真实问题检验理解，并与其他开发者共同贡献的地方。",
+    "outsideCode": "代码之外，我喜欢钻研技术、摄影和阅读。它们让我以不同的方式观察问题、记录世界，并保持对新事物的好奇心。",
+    "blogLink": "浏览我的博客",
+    "contact": {
+      "title": "联系我 🔎",
+      "description": "我正在寻找 DevOps Engineer 或 Infrastructure Engineer 相关机会，同时也欢迎开源协作与基础设施类项目合作。",
+      "email": "邮件"
+    },
+    "github": {
+      "summary": "{year} 年共 {count} 次贡献",
+      "oneContributionOn": "{date}：{count} 次贡献",
+      "contributionsOn": "{date}：{count} 次贡献",
+      "learnMore": "了解贡献记录的统计方式",
+      "intensity": "贡献活跃度",
+      "less": "较少",
+      "more": "较多",
+      "year": "贡献年份",
+      "monday": "周一",
+      "wednesday": "周三",
+      "friday": "周五",
+      "other": "其他",
+      "unavailable": "GitHub 语言统计暂时不可用。"
+    }
   },
   "error": {
     "notFoundTitle": "页面未找到",

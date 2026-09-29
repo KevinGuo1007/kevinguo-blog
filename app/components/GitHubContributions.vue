@@ -14,27 +14,28 @@ interface CalendarDay {
   week: number;
 }
 
-const monthNames = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-const dateFormatter = new Intl.DateTimeFormat("en-US", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-  timeZone: "UTC",
+const { locale, t } = useI18n();
+const intlLocale = computed(() => (locale.value === "zh" ? "zh-CN" : "en-US"));
+const monthNames = computed(() => {
+  const formatter = new Intl.DateTimeFormat(intlLocale.value, {
+    month: "short",
+    timeZone: "UTC",
+  });
+
+  return Array.from({ length: 12 }, (_, month) =>
+    formatter.format(new Date(Date.UTC(2024, month, 1))),
+  );
 });
-const numberFormatter = new Intl.NumberFormat("en-US");
+const dateFormatter = computed(
+  () =>
+    new Intl.DateTimeFormat(intlLocale.value, {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      timeZone: "UTC",
+    }),
+);
+const numberFormatter = computed(() => new Intl.NumberFormat(intlLocale.value));
 const contributions = generatedGitHubContributions as GitHubContributions;
 const selectedYear = ref(contributions.years[0]?.year ?? new Date().getFullYear());
 const selectedContributions = computed(
@@ -44,7 +45,7 @@ const selectedContributions = computed(
 );
 
 function formatDate(date: string) {
-  return dateFormatter.format(new Date(`${date}T00:00:00Z`));
+  return dateFormatter.value.format(new Date(`${date}T00:00:00Z`));
 }
 
 function createCalendarDays(year: number, contributionDays: GitHubContributionDay[]) {
@@ -88,7 +89,7 @@ const weekCount = computed(
   () => Math.max(...calendarDays.value.map((day) => day.week), 0) + 1,
 );
 const months = computed(() =>
-  monthNames.map((label, month) => {
+  monthNames.value.map((label, month) => {
     const firstDay = new Date(Date.UTC(selectedYear.value, month, 1));
     const yearStart = new Date(Date.UTC(selectedYear.value, 0, 1));
     const dayIndex = Math.round(
@@ -110,10 +111,15 @@ function dayTitle(day: CalendarDay) {
     return formatDate(day.date);
   }
 
-  const contributionLabel =
-    day.contributionCount === 1 ? "contribution" : "contributions";
-
-  return `${day.contributionCount} ${contributionLabel} on ${formatDate(day.date)}`;
+  return t(
+    day.contributionCount === 1
+      ? "about.github.oneContributionOn"
+      : "about.github.contributionsOn",
+    {
+      count: day.contributionCount,
+      date: formatDate(day.date),
+    },
+  );
 }
 </script>
 
@@ -125,8 +131,14 @@ function dayTitle(day: CalendarDay) {
     <div class="flex w-full min-w-0 items-stretch gap-3 sm:gap-4">
       <div class="w-0 min-w-0 flex-1 rounded-lg border border-default bg-default">
         <h2 class="px-4 pt-4 text-sm font-semibold text-highlighted sm:px-5 sm:pt-5">
-          {{ numberFormatter.format(selectedContributions.totalContributions) }}
-          contributions in {{ selectedYear }}
+          {{
+            t("about.github.summary", {
+              count: numberFormatter.format(
+                selectedContributions.totalContributions,
+              ),
+              year: selectedYear,
+            })
+          }}
         </h2>
 
         <div class="overflow-x-auto px-4 pt-4 pb-4 sm:px-5 sm:pb-5">
@@ -144,16 +156,23 @@ function dayTitle(day: CalendarDay) {
 
             <div class="calendar-body">
               <div class="weekday-labels" aria-hidden="true">
-                <span style="grid-row: 2">Mon</span>
-                <span style="grid-row: 4">Wed</span>
-                <span style="grid-row: 6">Fri</span>
+                <span style="grid-row: 2">{{ t("about.github.monday") }}</span>
+                <span style="grid-row: 4">{{ t("about.github.wednesday") }}</span>
+                <span style="grid-row: 6">{{ t("about.github.friday") }}</span>
               </div>
 
               <div
                 class="day-grid"
                 :style="calendarGridStyle"
                 role="img"
-                :aria-label="`${selectedContributions.totalContributions} contributions in ${selectedYear}`"
+                :aria-label="
+                  t('about.github.summary', {
+                    count: numberFormatter.format(
+                      selectedContributions.totalContributions,
+                    ),
+                    year: selectedYear,
+                  })
+                "
               >
                 <span
                   v-for="day in calendarDays"
@@ -176,17 +195,20 @@ function dayTitle(day: CalendarDay) {
                 rel="noopener noreferrer"
                 class="transition-colors hover:text-highlighted"
               >
-                Learn how we count contributions
+                {{ t("about.github.learnMore") }}
               </a>
 
-              <div class="flex items-center gap-1" aria-label="Contribution intensity">
-                <span class="mr-1">Less</span>
+              <div
+                class="flex items-center gap-1"
+                :aria-label="t('about.github.intensity')"
+              >
+                <span class="mr-1">{{ t("about.github.less") }}</span>
                 <span class="legend-day" data-level="NONE" />
                 <span class="legend-day" data-level="FIRST_QUARTILE" />
                 <span class="legend-day" data-level="SECOND_QUARTILE" />
                 <span class="legend-day" data-level="THIRD_QUARTILE" />
                 <span class="legend-day" data-level="FOURTH_QUARTILE" />
-                <span class="ml-1">More</span>
+                <span class="ml-1">{{ t("about.github.more") }}</span>
               </div>
             </div>
           </div>
@@ -195,7 +217,7 @@ function dayTitle(day: CalendarDay) {
 
       <div class="year-scroll-shell w-16 shrink-0 sm:w-24">
         <nav
-          aria-label="Contribution year"
+          :aria-label="t('about.github.year')"
           class="year-scroll overflow-y-auto overscroll-contain"
         >
           <ul class="space-y-1">

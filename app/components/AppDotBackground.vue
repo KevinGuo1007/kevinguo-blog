@@ -63,19 +63,13 @@ function draw(time: number) {
 
   for (let x = -DOT_SPACING / 2; x < width + DOT_SPACING; x += DOT_SPACING) {
     const isInLeftGutter = hasLeftGutter && x < shellLeft - exclusionPadding;
-    const isInRightGutter =
-      hasRightGutter && x > shellRight + exclusionPadding;
+    const isInRightGutter = hasRightGutter && x > shellRight + exclusionPadding;
 
     if (!isInLeftGutter && !isInRightGutter) continue;
 
-    for (
-      let y = -DOT_SPACING / 2;
-      y < height + DOT_SPACING;
-      y += DOT_SPACING
-    ) {
+    for (let y = -DOT_SPACING / 2; y < height + DOT_SPACING; y += DOT_SPACING) {
       const wave =
-        Math.sin(y / 92 + phase) +
-        Math.sin((x + y) / 168 - phase * 0.8) * 0.55;
+        Math.sin(y / 92 + phase) + Math.sin((x + y) / 168 - phase * 0.8) * 0.55;
       const crossWave =
         Math.cos(x / 118 - phase * 1.15) +
         Math.sin((x - y) / 214 + phase * 0.65) * 0.45;
@@ -85,13 +79,7 @@ function draw(time: number) {
 
       context.globalAlpha = pointOpacity(x, y) * pulse;
       context.beginPath();
-      context.arc(
-        x + offsetX,
-        y + offsetY,
-        DOT_RADIUS,
-        0,
-        Math.PI * 2,
-      );
+      context.arc(x + offsetX, y + offsetY, DOT_RADIUS, 0, Math.PI * 2);
       context.fill();
     }
   }

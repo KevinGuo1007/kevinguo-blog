@@ -5,7 +5,12 @@ import generatedGitHubLanguageStats from "~/generated/github-language-stats.json
 
 const { t } = useI18n();
 const githubLanguageStats = generatedGitHubLanguageStats as GitHubLanguageStats;
-const githubLanguageItems: ProgressGroupItem[] = githubLanguageStats.items;
+const githubLanguageItems = computed<ProgressGroupItem[]>(() =>
+  githubLanguageStats.items.map((item) => ({
+    ...item,
+    label: item.label === "Other" ? t("about.github.other") : item.label,
+  })),
+);
 
 useSeoMeta({
   title: () => t("about.title"),
@@ -18,15 +23,15 @@ defineProps<{
 }>();
 
 const items = [
-  "/images/about/event-000.JPG",
-  "/images/about/event-001.JPG",
-  "/images/about/event-002.JPG",
-  "/images/about/event-003.JPG",
+  "/images/about/event-000.webp",
+  "/images/about/event-001.webp",
+  "/images/about/event-002.webp",
+  "/images/about/event-003.webp",
 ];
 
-const links = ref<ButtonProps[]>([
+const links = computed<ButtonProps[]>(() => [
   {
-    label: "Explore my blogs",
+    label: t("about.blogLink"),
     to: "/blog",
     color: "neutral",
     variant: "subtle",
@@ -34,9 +39,9 @@ const links = ref<ButtonProps[]>([
   },
 ]);
 
-const contactLinks = [
+const contactLinks = computed<ButtonProps[]>(() => [
   {
-    label: "Email",
+    label: t("about.contact.email"),
     icon: "i-lucide-mail",
     to: "mailto:kevin1007028568@gmail.com",
     // target: "_blank",
@@ -51,40 +56,83 @@ const contactLinks = [
     variant: "outline",
     trailingIcon: "i-lucide-arrow-up-right",
   },
-] satisfies ButtonProps[];
+]);
+
+const carouselContainer = useTemplateRef<HTMLElement>("carouselContainer");
+const isCarouselVisible = ref(false);
+let carouselObserver: IntersectionObserver | undefined;
+
+onMounted(() => {
+  if (
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+    !("IntersectionObserver" in window)
+  ) {
+    isCarouselVisible.value = true;
+    return;
+  }
+
+  carouselObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry?.isIntersecting) return;
+
+      isCarouselVisible.value = true;
+      carouselObserver?.disconnect();
+    },
+    { threshold: 0.15 },
+  );
+
+  if (carouselContainer.value) {
+    carouselObserver.observe(carouselContainer.value);
+  }
+});
+
+onBeforeUnmount(() => carouselObserver?.disconnect());
 </script>
 
 <template>
   <div>
     <UPageSection
-      title="What about me? 🧐"
-      description="From building products to building the infrastructure behind them."
       orientation="horizontal"
       reverse
       :links="links"
+      class="min-h-[calc(100svh-4rem)] sm:min-h-[calc(100svh-5rem)]"
       :ui="{
         container: 'pb-8 sm:pb-12 lg:pb-16',
       }"
     >
+      <template #title>
+        <span data-animate style="--stagger: 1">
+          {{ t("about.heading") }}
+        </span>
+      </template>
+      <template #description>
+        <span data-animate style="--stagger: 3">
+          {{ t("about.tagline") }}
+        </span>
+      </template>
       <template #body>
         <div
+          data-animate
           class="mx-auto max-w-prose space-y-5 text-base leading-7 text-highlighted sm:leading-8"
+          style="--stagger: 4"
         >
-          <p>
-            Hi, I'm Kevin Guo, a software engineer with a full-stack background
-            who is now moving deeper into DevOps and AI infrastructure.
-          </p>
-          <p>
-            I started with full-stack development because many of the projects I
-            worked on required both frontend and backend ownership.
-            Understanding both sides of a product helped me build systems more
-            coherently and maintain consistency across architecture,
-            functionality, and user experience.
-          </p>
+          <p>{{ t("about.introduction") }}</p>
+          <p>{{ t("about.fullStackBackground") }}</p>
+        </div>
+      </template>
+      <template #links>
+        <div data-animate style="--stagger: 5">
+          <UButton
+            v-for="link in links"
+            :key="String(link.to)"
+            size="lg"
+            v-bind="link"
+          />
         </div>
       </template>
       <NuxtImg
-        src="/images/profile/headshot.png"
+        data-animate
+        src="/images/profile/headshot.webp"
         width="512"
         height="640"
         sizes="240px sm:320px"
@@ -92,7 +140,9 @@ const contactLinks = [
         quality="80"
         alt="Kevin Guo"
         class="mx-auto w-full max-w-60 rounded-lg sm:max-w-xs"
-        loading="lazy"
+        loading="eager"
+        fetchpriority="high"
+        style="--stagger: 1"
       />
     </UPageSection>
 
@@ -102,52 +152,49 @@ const contactLinks = [
         container: 'pt-8 pb-8 sm:pt-8 sm:pb-8 lg:pt-8 lg:pb-8',
       }"
     >
-      <UCarousel
-        v-slot="{ item }"
-        arrows
-        dots
-        :prev-icon="prevIcon"
-        :next-icon="nextIcon"
-        :items="items"
-        :ui="{
-          dots: '-bottom-8',
-          dot: 'h-1 w-6 rounded-full',
-        }"
-        class="w-full max-w-xs mx-auto"
+      <div
+        ref="carouselContainer"
+        :data-animate="isCarouselVisible ? '' : undefined"
+        :class="{ 'motion-safe:opacity-0': !isCarouselVisible }"
+        style="--stagger: 1"
       >
-        <NuxtImg
-          :src="item"
-          width="960"
-          height="640"
-          sizes="100vw sm:640px lg:896px"
-          format="webp"
-          quality="80"
-          alt=""
-          class="aspect-3/2 w-full rounded-xl object-cover"
-          loading="lazy"
-        />
-      </UCarousel>
+        <UCarousel
+          v-slot="{ item }"
+          arrows
+          dots
+          :prev-icon="prevIcon"
+          :next-icon="nextIcon"
+          :items="items"
+          :ui="{
+            dots: '-bottom-8',
+            dot: 'h-1 w-6 rounded-full',
+          }"
+          class="w-full max-w-xs mx-auto"
+        >
+          <NuxtImg
+            :src="item"
+            width="960"
+            height="640"
+            sizes="320px"
+            format="webp"
+            quality="80"
+            alt=""
+            class="aspect-3/2 w-full rounded-xl object-cover"
+            loading="lazy"
+          />
+        </UCarousel>
+      </div>
       <template #body>
         <div
           class="mx-auto max-w-prose space-y-5 text-base leading-7 text-highlighted sm:leading-8"
         >
-          <p>
-            As I studied operating systems and began deploying my own projects,
-            I realized that building an application is only the first step.
-            Delivering it efficiently, operating it reliably, and scaling it
-            sustainably are equally important. That realization gradually
-            shifted my attention from applications themselves to the
-            infrastructure that supports them. Today, I'm developing my
-            knowledge of cloud infrastructure, CI/CD, developer productivity,
-            containers, Kubernetes, deep learning, and GPU inference clusters
-            while exploring practical paths into DevOps and AI infrastructure.
-          </p>
+          <p>{{ t("about.infrastructureJourney") }}</p>
         </div>
       </template>
     </UPageSection>
 
     <UPageSection
-      description="As AI enables more people to become developers, I want to help build the “shovels” they rely on—the tools and infrastructure that allow software to be delivered efficiently, operated reliably, and scaled with confidence."
+      :description="t('about.vision')"
       :ui="{
         container: 'pt-8 sm:pt-12 lg:pt-16',
       }"
@@ -156,17 +203,8 @@ const contactLinks = [
         <div
           class="mx-auto max-w-prose space-y-5 text-base leading-7 text-highlighted sm:leading-8"
         >
-          <p>
-            I also actively take part in technical events and open-source
-            communities. For me, a community is not only a place to learn, but
-            also a place to exchange ideas, test my understanding against real
-            problems, and contribute alongside other developers.
-          </p>
-          <p>
-            Outside of code, I enjoy exploring technology, photography, and
-            reading. Each gives me a different way to examine problems, document
-            the world, and stay curious.
-          </p>
+          <p>{{ t("about.community") }}</p>
+          <p>{{ t("about.outsideCode") }}</p>
         </div>
       </template>
     </UPageSection>
@@ -192,7 +230,7 @@ const contactLinks = [
           </UProgressGroup>
 
           <p v-else class="text-sm text-muted">
-            GitHub language statistics are temporarily unavailable.
+            {{ t("about.github.unavailable") }}
           </p>
         </div>
       </template>
@@ -200,8 +238,8 @@ const contactLinks = [
 
     <UContainer class="pb-16 sm:pb-24 lg:pb-32">
       <UPageCTA
-        title="Get in touch 🔎"
-        description="I'm currently open to DevOps Engineer and Infrastructure Engineer opportunities, as well as open-source collaboration and infrastructure-focused projects."
+        :title="t('about.contact.title')"
+        :description="t('about.contact.description')"
         variant="naked"
         :links="contactLinks"
         :ui="{
