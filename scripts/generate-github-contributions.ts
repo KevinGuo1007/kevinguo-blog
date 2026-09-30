@@ -217,7 +217,44 @@ async function writeContributions(result: GitHubContributions) {
   return true;
 }
 
+async function useExistingContributions() {
+  let snapshot: unknown;
+
+  try {
+    snapshot = JSON.parse(await readFile(outputFile, "utf8"));
+  } catch {
+    throw new Error(
+      "NUXT_GITHUB_TOKEN is required when no valid generated contributions snapshot exists",
+    );
+  }
+
+  if (
+    !snapshot ||
+    typeof snapshot !== "object" ||
+    !("username" in snapshot) ||
+    typeof snapshot.username !== "string" ||
+    snapshot.username.toLowerCase() !== githubUsername.toLowerCase() ||
+    !("years" in snapshot) ||
+    !Array.isArray(snapshot.years) ||
+    snapshot.years.length === 0 ||
+    snapshot.years.some(
+      (year) => !Number.isInteger(year?.year) || !Array.isArray(year?.days),
+    )
+  ) {
+    throw new Error(
+      "NUXT_GITHUB_TOKEN is required when the generated contributions snapshot is invalid or belongs to another user",
+    );
+  }
+
+  console.log(`Using existing GitHub contributions for ${snapshot.years.length} year(s).`);
+}
+
 async function generateContributions() {
+  if (!githubToken || githubToken === "github_pat_xxx") {
+    await useExistingContributions();
+    return;
+  }
+
   const now = new Date();
   const contributionYears = await fetchContributionYears();
   const years = [];
