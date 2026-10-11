@@ -2,6 +2,9 @@
 const { locale, t } = useI18n();
 const localePath = useLocalePath();
 const selectedTags = ref<string[]>([]);
+const currentPage = ref(1);
+const articlesPerPage = 10;
+const articleList = useTemplateRef("articleList");
 
 const { data: articles } = await useAsyncData("blog-list", () =>
   queryCollection("blog")
@@ -50,6 +53,31 @@ const filteredArticles = computed(() => {
     })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 });
+
+const paginatedArticles = computed(() => {
+  const start = (currentPage.value - 1) * articlesPerPage;
+
+  return filteredArticles.value.slice(start, start + articlesPerPage);
+});
+
+watch(
+  selectedTags,
+  () => {
+    currentPage.value = 1;
+  },
+  { deep: true },
+);
+
+async function scrollToArticles() {
+  await nextTick();
+
+  articleList.value?.scrollIntoView({
+    block: "start",
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "instant"
+      : "smooth",
+  });
+}
 
 function selectTag(tag: string) {
   const normalizedTag = tag.toLocaleLowerCase(locale.value);
@@ -125,11 +153,12 @@ useSeoMeta({
 
     <div
       v-if="filteredArticles.length"
-      class="slide-enter-content mt-10 space-y-6"
+      ref="articleList"
+      class="slide-enter-content mt-10 scroll-mt-24 space-y-6"
       style="--enter-start: 160ms"
     >
       <UBlogPost
-        v-for="article in filteredArticles"
+        v-for="article in paginatedArticles"
         :key="article.id"
         :to="localePath(`/blog/${article.slug}`)"
         :title="article.title"
@@ -167,5 +196,51 @@ useSeoMeta({
     >
       {{ selectedTags.length ? $t("blog.noMatches") : $t("blog.empty") }}
     </p>
+
+    <UPagination
+      v-if="filteredArticles.length > articlesPerPage"
+      v-model:page="currentPage"
+      :items-per-page="articlesPerPage"
+      :total="filteredArticles.length"
+      :sibling-count="1"
+      :show-controls="false"
+      show-edges
+      size="sm"
+      :aria-label="$t('blog.pagination')"
+      class="mt-10 justify-center"
+      @update:page="scrollToArticles"
+    >
+      <template #prev>
+        <UButton
+          icon="i-lucide-chevron-left"
+          color="neutral"
+          variant="outline"
+          size="sm"
+          :aria-label="$t('blog.previousPage')"
+        />
+      </template>
+
+      <template #item="{ item, page }">
+        <UButton
+          v-if="item.type === 'page'"
+          :label="String(item.value)"
+          :color="page === item.value ? 'primary' : 'neutral'"
+          :variant="page === item.value ? 'solid' : 'outline'"
+          :aria-label="$t('blog.pageLabel', { page: item.value })"
+          size="sm"
+          square
+        />
+      </template>
+
+      <template #next>
+        <UButton
+          icon="i-lucide-chevron-right"
+          color="neutral"
+          variant="outline"
+          size="sm"
+          :aria-label="$t('blog.nextPage')"
+        />
+      </template>
+    </UPagination>
   </section>
 </template>
