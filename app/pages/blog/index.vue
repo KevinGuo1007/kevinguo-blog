@@ -207,7 +207,7 @@ useSeoMeta({
       show-edges
       size="sm"
       :aria-label="$t('blog.pagination')"
-      class="mt-10 justify-center"
+      class="mt-10 flex justify-center"
       @update:page="scrollToArticles"
     >
       <template #prev>
@@ -227,6 +227,7 @@ useSeoMeta({
           :color="page === item.value ? 'primary' : 'neutral'"
           :variant="page === item.value ? 'solid' : 'outline'"
           :aria-label="$t('blog.pageLabel', { page: item.value })"
+          :ui="{ label: 'min-w-5 text-center' }"
           size="sm"
           square
         />
