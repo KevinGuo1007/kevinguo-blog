@@ -2,30 +2,21 @@ import { access, readdir, readFile } from "node:fs/promises";
 import { join, relative, resolve } from "node:path";
 import { parse } from "yaml";
 
-type Locale = "en-US" | "zh-CN";
-
 interface ArticleFrontmatter {
   draft?: boolean;
   image?: string;
   slug?: string;
   tags?: string[];
-  translationKey?: string;
 }
 
 interface Article extends ArticleFrontmatter {
   file: string;
-  locale: Locale;
 }
 
 const projectRoot = process.cwd();
-const contentRoot = join(projectRoot, "content");
+const contentRoot = join(projectRoot, "content", "blog");
 const publicRoot = join(projectRoot, "public");
-const locales: Locale[] = ["en-US", "zh-CN"];
-// Existing editorial debt. New Chinese-only posts still fail validation; remove
-// an entry as soon as its English source is added.
-const knownMissingEnglishSources = new Set(["swift-swiftui-learning-notes"]);
 const errors: string[] = [];
-const warnings: string[] = [];
 
 async function listMarkdownFiles(directory: string): Promise<string[]> {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -42,7 +33,7 @@ async function listMarkdownFiles(directory: string): Promise<string[]> {
   return nestedFiles.flat();
 }
 
-async function readArticle(file: string, locale: Locale): Promise<Article | null> {
+async function readArticle(file: string): Promise<Article | null> {
   const source = await readFile(file, "utf8");
   const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/);
   const displayPath = relative(projectRoot, file);
@@ -56,7 +47,6 @@ async function readArticle(file: string, locale: Locale): Promise<Article | null
     return {
       ...(parse(match[1]) as ArticleFrontmatter),
       file: displayPath,
-      locale,
     };
   } catch (error) {
     errors.push(
@@ -66,16 +56,16 @@ async function readArticle(file: string, locale: Locale): Promise<Article | null
   }
 }
 
-function checkUnique(
-  articles: Article[],
-  field: "slug" | "translationKey",
-) {
+function checkUniqueSlugs(articles: Article[]) {
   const seen = new Map<string, string>();
 
   for (const article of articles) {
-    const value = article[field];
+    const value = article.slug;
 
-    if (!value) {
+    if (typeof value !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value)) {
+      errors.push(
+        `${article.file}: slug must use lowercase ASCII letters, numbers and hyphens`,
+      );
       continue;
     }
 
@@ -83,16 +73,12 @@ function checkUnique(
 
     if (previousFile) {
       errors.push(
-        `${article.file}: duplicate ${field} "${value}" (already used by ${previousFile})`,
+        `${article.file}: duplicate slug "${value}" (already used by ${previousFile})`,
       );
     } else {
       seen.set(value, article.file);
     }
   }
-}
-
-function sameStringArray(left: string[] = [], right: string[] = []) {
-  return [...left].sort().join("\0") === [...right].sort().join("\0");
 }
 
 async function checkImage(article: Article) {
@@ -119,86 +105,13 @@ async function checkImage(article: Article) {
   }
 }
 
-const articles = (
-  await Promise.all(
-    locales.map(async (locale) => {
-      const files = await listMarkdownFiles(join(contentRoot, locale, "blog"));
-      return Promise.all(files.map((file) => readArticle(file, locale)));
-    }),
-  )
-).flat().filter((article): article is Article => article !== null);
+const files = await listMarkdownFiles(contentRoot);
+const articles = (await Promise.all(files.map(readArticle))).filter(
+  (article): article is Article => article !== null,
+);
 
-for (const locale of locales) {
-  const localizedArticles = articles.filter((article) => article.locale === locale);
-  checkUnique(localizedArticles, "slug");
-  checkUnique(localizedArticles, "translationKey");
-}
-
+checkUniqueSlugs(articles);
 await Promise.all(articles.map(checkImage));
-
-const englishByTranslationKey = new Map(
-  articles
-    .filter((article) => article.locale === "en-US" && article.translationKey)
-    .map((article) => [article.translationKey!, article]),
-);
-const chineseByTranslationKey = new Map(
-  articles
-    .filter((article) => article.locale === "zh-CN" && article.translationKey)
-    .map((article) => [article.translationKey!, article]),
-);
-
-for (const article of articles) {
-  if (!article.translationKey) {
-    continue;
-  }
-
-  const counterpart =
-    article.locale === "en-US"
-      ? chineseByTranslationKey.get(article.translationKey)
-      : englishByTranslationKey.get(article.translationKey);
-
-  if (!counterpart) {
-    const message = `${article.file}: no ${article.locale === "en-US" ? "Chinese" : "English"} counterpart for "${article.translationKey}"`;
-
-    if (article.locale === "en-US") {
-      // English is the source language and translations are optional.
-      continue;
-    }
-
-    if (knownMissingEnglishSources.has(article.translationKey)) {
-      warnings.push(`${message} (known editorial debt)`);
-    } else {
-      errors.push(message);
-    }
-    continue;
-  }
-
-  if (article.locale !== "en-US") {
-    continue;
-  }
-
-  if (article.slug !== counterpart.slug) {
-    errors.push(
-      `${article.file} and ${counterpart.file}: translated articles must use the same slug`,
-    );
-  }
-
-  if (!sameStringArray(article.tags, counterpart.tags)) {
-    errors.push(
-      `${article.file} and ${counterpart.file}: translated articles must use the same tag IDs`,
-    );
-  }
-
-  if (article.image !== counterpart.image) {
-    errors.push(
-      `${article.file} and ${counterpart.file}: translated articles must use the same image`,
-    );
-  }
-}
-
-for (const warning of warnings) {
-  console.warn(`WARN ${warning}`);
-}
 
 for (const error of errors) {
   console.error(`ERROR ${error}`);
@@ -208,7 +121,5 @@ if (errors.length) {
   console.error(`Content check failed with ${errors.length} error(s).`);
   process.exitCode = 1;
 } else {
-  console.log(
-    `Content check passed for ${articles.length} article(s) with ${warnings.length} warning(s).`,
-  );
+  console.log(`Content check passed for ${articles.length} article(s).`);
 }

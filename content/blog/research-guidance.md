@@ -2,7 +2,6 @@
 title: '科研学习笔记｜How to read Research Papers 如何读学术论文'
 description: '尝试开始自己曲折的学术之路'
 slug: research-guidance
-translationKey: research-guidance
 date: "2025-11-14"
 tags: ['research', 'academic', 'note']
 featured: false

@@ -4,8 +4,6 @@ import { en, zh_cn } from "@nuxt/ui/locale";
 const { locale } = useI18n();
 const uiLocale = computed(() => (locale.value === "zh" ? zh_cn : en));
 const i18nHead = useLocaleHead({ seo: true });
-const { isArticleRoute, targetLocale, targetPath } =
-  await useLocaleSwitchTarget();
 const { open: isSearchOpen } = useContentSearch();
 const isSearchInitialized = ref(false);
 
@@ -33,32 +31,8 @@ useHead(() => ({
     lang: i18nHead.value.htmlAttrs?.lang,
     dir: i18nHead.value.htmlAttrs?.dir,
   },
-  link: (i18nHead.value.link || []).filter((link) => {
-    if (!isArticleRoute.value || targetPath.value || link.rel !== "alternate") {
-      return true;
-    }
-
-    const unavailableHreflangs =
-      targetLocale.value === "en"
-        ? new Set(["x-default", "en", "en-US"])
-        : new Set(["zh", "zh-CN"]);
-
-    return !unavailableHreflangs.has(String(link.hreflang));
-  }),
-  meta: (i18nHead.value.meta || []).filter((meta) => {
-    if (
-      !isArticleRoute.value ||
-      targetPath.value ||
-      meta.property !== "og:locale:alternate"
-    ) {
-      return true;
-    }
-
-    const unavailableOgLocale =
-      targetLocale.value === "en" ? "en_US" : "zh_CN";
-
-    return meta.content !== unavailableOgLocale;
-  }),
+  link: i18nHead.value.link,
+  meta: i18nHead.value.meta,
 }));
 </script>
 

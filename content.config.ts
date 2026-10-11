@@ -4,7 +4,6 @@ const blogSchema = z.object({
   title: z.string(),
   description: z.string(),
   slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-  translationKey: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
   date: z.string().date(),
   updated: z.string().date().optional(),
   image: z.string().optional(),
@@ -17,15 +16,9 @@ const blogSchema = z.object({
 
 export default defineContentConfig({
   collections: {
-    blogEn: defineCollection({
+    blog: defineCollection({
       type: "page",
-      source: "en-US/blog/**/*.md",
-      schema: blogSchema,
-    }),
-
-    blogZh: defineCollection({
-      type: "page",
-      source: "zh-CN/blog/**/*.md",
+      source: "blog/**/*.md",
       schema: blogSchema,
     }),
   },

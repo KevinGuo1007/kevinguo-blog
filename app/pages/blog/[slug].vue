@@ -4,18 +4,17 @@ import type { ContentNavigationItem } from "@nuxt/content";
 const route = useRoute();
 const { locale } = useI18n();
 const localePath = useLocalePath();
-const { collection } = useBlogCollection();
 
 const slug = computed(() => String(route.params.slug));
 
 const { data: article } = await useAsyncData(
-  () => `blog-${locale.value}-${slug.value}`,
+  () => `blog-${slug.value}`,
   () =>
-    queryCollection(collection.value)
+    queryCollection("blog")
       .where("slug", "=", slug.value)
       .where("draft", "=", false)
       .first(),
-  { watch: [collection, slug] },
+  { watch: [slug] },
 );
 
 if (!article.value) {
@@ -44,14 +43,14 @@ const formattedDate = computed(() =>
 );
 
 const { data: articleSurround } = await useAsyncData(
-  () => `blog-surround-${locale.value}-${slug.value}`,
+  () => `blog-surround-${slug.value}`,
   () =>
-    queryCollectionItemSurroundings(collection.value, article.value!.path, {
+    queryCollectionItemSurroundings("blog", article.value!.path, {
       fields: ["description", "slug"],
     })
       .where("draft", "=", false)
       .order("date", "ASC"),
-  { watch: [collection, slug] },
+  { watch: [slug] },
 );
 
 const surround = computed(

@@ -2,7 +2,6 @@
 title: '在双系统中将 Windows 下的磁盘分区挂载为 Linux 系统的硬盘'
 description: '捣鼓 Arch Linux'
 slug: linux-add-second-disk
-translationKey: linux-add-second-disk
 date: "2025-10-28"
 tags: ['arch-linux', 'configuration', 'linux']
 featured: false

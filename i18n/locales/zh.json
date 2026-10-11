@@ -29,7 +29,7 @@
     "open": "搜索",
     "close": "关闭搜索",
     "title": "搜索",
-    "description": "搜索当前语言下的文章。",
+    "description": "搜索所有已发布的文章。",
     "placeholder": "搜索文章……",
     "loading": "正在加载搜索索引……",
     "hint": "输入关键词搜索标题、摘要、正文和标签。",

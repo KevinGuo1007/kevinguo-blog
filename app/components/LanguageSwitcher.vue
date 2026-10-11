@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { ariaLabel, targetLocale, targetPath, targetShortLabel } =
-  await useLocaleSwitchTarget();
+  useLocaleSwitchTarget();
 </script>
 
 <template>

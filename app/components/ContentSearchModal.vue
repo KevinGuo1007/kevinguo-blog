@@ -3,47 +3,41 @@ import Fuse from "fuse.js";
 
 const { locale, t } = useI18n();
 const localePath = useLocalePath();
-const { collection } = useBlogCollection();
 const { open: isSearchOpen } = useContentSearch();
 const searchTerm = ref("");
 
-const { data: searchData, status, execute } = useAsyncData(
+const { data: sections, status, execute } = useAsyncData(
   "content-search",
-  async () => {
-    const requestedLocale = locale.value;
-    const sections = await queryCollectionSearchSections(collection.value, {
+  () =>
+    queryCollectionSearchSections("blog", {
       extraFields: ["slug", "description", "tags"],
-    }).where("draft", "=", false);
-
-    const files = sections.map((section) => {
-      const hashIndex = section.id.indexOf("#");
-      const hash = hashIndex >= 0 ? section.id.slice(hashIndex) : "";
-      const path = localePath(`/blog/${section.slug}`, requestedLocale);
-
-      return {
-        id: `${path}${hash}`,
-        title: section.title,
-        titles: section.titles,
-        level: section.level,
-        content: [section.description, section.tags?.join(" "), section.content]
-          .filter(Boolean)
-          .join(" · "),
-      };
-    });
-
-    return { files, locale: requestedLocale };
-  },
+    }).where("draft", "=", false),
   {
     immediate: false,
     server: false,
   },
 );
 
+const files = computed(() =>
+  (sections.value ?? []).map((section) => {
+    const hashIndex = section.id.indexOf("#");
+    const hash = hashIndex >= 0 ? section.id.slice(hashIndex) : "";
+    const path = localePath(`/blog/${section.slug}`, locale.value);
+
+    return {
+      id: `${path}${hash}`,
+      title: section.title,
+      titles: section.titles,
+      level: section.level,
+      content: [section.description, section.tags?.join(" "), section.content]
+        .filter(Boolean)
+        .join(" · "),
+    };
+  }),
+);
+
 const isLoading = computed(
   () => status.value === "idle" || status.value === "pending",
-);
-const files = computed(() =>
-  searchData.value?.locale === locale.value ? searchData.value.files : [],
 );
 const searchIndex = computed(
   () =>
@@ -67,7 +61,7 @@ const searchResults = computed(() => {
 });
 
 async function loadSearchData() {
-  if (searchData.value?.locale !== locale.value) {
+  if (!sections.value) {
     await execute();
   }
 }

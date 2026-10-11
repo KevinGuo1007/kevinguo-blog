@@ -2,7 +2,6 @@
 title: '教程｜macOS 下超好用的包管理工具 homebrew'
 description: '一篇LaTex的vscode环境配置指南'
 slug: homebrew-tutorial
-translationKey: homebrew-tutorial
 date: "2025-10-18"
 tags: ['macos', 'tutorial', 'tool']
 featured: false

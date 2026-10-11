@@ -1,12 +1,10 @@
 <script setup lang="ts">
 const { locale, t } = useI18n();
 const localePath = useLocalePath();
-const { collection } = useBlogCollection();
-const blogListKey = computed(() => `blog-list-${locale.value}`);
 const selectedTags = ref<string[]>([]);
 
-const { data: articles } = await useAsyncData(blogListKey, () =>
-  queryCollection(collection.value)
+const { data: articles } = await useAsyncData("blog-list", () =>
+  queryCollection("blog")
     .select("id", "title", "description", "slug", "date", "image", "tags")
     .where("draft", "=", false)
     .order("date", "DESC")

@@ -2,7 +2,6 @@
 title: 'LaTex 配置指南'
 description: '一篇LaTex的vscode环境配置指南'
 slug: latex-study
-translationKey: latex-study
 date: "2024-12-22"
 tags: ['latex', 'configuration']
 featured: false

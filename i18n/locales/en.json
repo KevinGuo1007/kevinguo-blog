@@ -29,7 +29,7 @@
     "open": "Search",
     "close": "Close search",
     "title": "Search",
-    "description": "Search articles in the current language.",
+    "description": "Search all published articles.",
     "placeholder": "Search articles...",
     "loading": "Loading search index...",
     "hint": "Type to search titles, descriptions, content and tags.",

@@ -2,7 +2,6 @@
 title: Git复习笔记
 description: 快速复习常用的Git相关命令
 slug: git-review-notes
-translationKey: git-review-notes
 date: "2026-07-13"
 updated: 2026-09-23
 tags:

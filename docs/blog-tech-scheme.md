@@ -1,8 +1,8 @@
 # 个人博客技术方案
 
 > 状态：基础工程已初始化，页面功能待实现
-> 最后整理：2026-09-06
-> 目标：使用 Nuxt 构建一个面向全球访问者、以英文为默认语言并提供手工维护中文译文的个人主页与文章博客。
+> 最后整理：2026-10-11
+> 目标：使用 Nuxt 构建一个面向全球访问者、界面以英文为默认语言、支持中文切换，文章按原始语言发布的个人主页与文章博客。
 
 ## 1. 项目目标
 
@@ -12,9 +12,9 @@
 
 - 使用 Nuxt 生态内成熟的模块和 UI 组件缩短上线时间。
 - 页面结构和视觉风格自行设计，不使用现成博客页面模板。
-- Markdown 和 Git 是唯一内容源，所有文章及译文都可版本控制和回滚。
-- 英文是默认语言，也是文章的原始创作语言。
-- 中文文章由作者手工编写和维护，不使用机器翻译、翻译 API 或自动翻译流水线。
+- Markdown 和 Git 是唯一内容源，所有文章都可版本控制和回滚。
+- 英文是默认界面语言，文章的写作语言由作者决定。
+- 每篇文章只维护一份 Markdown，不需要译文；中英文界面显示相同的文章内容。
 - 网站以 SSG 方式生成，不依赖常驻服务端或业务数据库。
 
 ## 2. 技术栈
@@ -30,7 +30,7 @@
 | 多语言 | `@nuxtjs/i18n` | UI 文案、语言切换、多语言路由和国际化 SEO |
 | 图标 | Nuxt Icon / Iconify | 图标加载与展示 |
 | 图片 | Nuxt Image | 响应式图片和图片优化 |
-| 搜索 | Nuxt Content Search + Fuse.js | 当前语言下的客户端全文搜索 |
+| 搜索 | Nuxt Content Search + Fuse.js | 统一文章集合的客户端全文搜索 |
 | SEO | `useSeoMeta`、Sitemap、Robots、OG Image | 搜索引擎索引和社交分享 |
 | 输出方式 | SSG 静态生成 | 构建静态 HTML 与资源 |
 | 包管理 | pnpm | 依赖安装和脚本运行 |
@@ -46,15 +46,15 @@
 
 ```text
 /                       # 英文首页
-/blog                   # 英文文章列表
-/blog/:slug             # 英文文章详情
+/blog                   # 英文界面的统一文章列表
+/blog/:slug             # 英文界面的原文详情
 /tags                   # 英文标签集合
 /tags/:tag               # 英文标签详情
 /about                  # 英文关于页面
 
 /zh                     # 中文首页
-/zh/blog                # 中文文章列表
-/zh/blog/:slug          # 中文文章详情
+/zh/blog                # 中文界面的统一文章列表
+/zh/blog/:slug          # 中文界面的原文详情
 /zh/tags                # 中文标签集合
 /zh/tags/:tag            # 中文标签详情
 /zh/about               # 中文关于页面
@@ -107,8 +107,7 @@
 │   ├── pages/
 │   └── app.vue
 ├── content/
-│   ├── en-US/blog/          # 英文原始文章
-│   └── zh-CN/blog/          # 手工维护的中文译文
+│   └── blog/                # 所有文章，每篇只维护一份原文
 ├── i18n/
 │   └── locales/
 │       ├── en.json
@@ -129,30 +128,23 @@
 UI 文案与文章内容分开管理：
 
 - `i18n/locales/*.json` 保存导航、按钮、搜索提示、空状态等 UI 文案。
-- `content/en-US/blog/*.md` 保存英文原文。
-- `content/zh-CN/blog/*.md` 保存作者手工维护的中文译文。
+- `content/blog/**/*.md` 保存所有文章的标题、摘要、正文和元数据，不按语言划分。
 
-## 6. 内容与手工翻译方案
+## 6. 统一文章内容
 
 ### 6.1 内容集合
 
-分别建立两个 Nuxt Content 集合：
+只建立一个 Nuxt Content 集合 `blog`，读取 `content/blog/**/*.md`。列表、详情、上一篇和下一篇以及搜索都查询这个集合，不随界面语言改变内容源。
 
-- `blogEn`：读取 `content/en-US/blog/**/*.md`。
-- `blogZh`：读取 `content/zh-CN/blog/**/*.md`。
+### 6.2 文章规则
 
-页面根据当前 locale 选择集合，多语言页面路由与 Content 文件路径保持解耦。
-
-### 6.2 文章对应关系
-
-英文和中文文件独立维护，通过相同的 ASCII `slug` 和 `translationKey` 建立关系：
+每篇文章只有一份 Markdown，Frontmatter 示例：
 
 ```yaml
 ---
 title: Building a Personal Blog with Nuxt
 description: Notes on the technical decisions behind this personal blog
 slug: building-a-nuxt-blog
-translationKey: building-a-nuxt-blog
 date: 2026-09-06
 updated: 2026-09-06
 image: /images/blog/building-a-nuxt-blog.webp
@@ -164,46 +156,37 @@ draft: false
 ---
 ```
 
-内容规则：
+- `slug` 在所有文章中唯一，使用小写 ASCII 字母、数字和连字符。
+- 标题、摘要、正文和图片替代文字按作者写作的内容原样展示，允许中文、英文或混合语言。
+- 标签使用稳定 ID，当前页面直接显示 ID。
+- 导航、按钮、搜索提示、目录标题和日期格式随界面语言切换。
+- 每篇已发布文章同时可通过 `/blog/<slug>` 和 `/zh/blog/<slug>` 阅读；切换界面语言时保留当前文章。
+- `draft: true` 的文章不进入列表、详情、上一篇和下一篇、搜索或 Sitemap。
 
-- 英文文章是原文，可以没有中文译文并单独发布。
-- 中文文章必须存在相同 `translationKey` 的英文原文。
-- 中文译文不存在时，不生成对应中文文章路由。
-- 语言切换器只链接真实存在的译文，不能链接到 404。
-- `slug`、`translationKey`、标签和图片路径等结构化字段应在两种语言中保持一致。
-- 标题、摘要、SEO 文案、正文和图片替代文字由作者分别编写。
-- 标签使用稳定 ID；中英文显示名称放在语言字典中。
-- 原文更新后，由作者自行检查并同步中文译文。
-
-项目不维护 `machine`、`reviewed`、`locked`、`stale` 等机器翻译状态，也不保存模型、提示词或翻译缓存信息。
-
-### 6.3 推荐写作流程
+### 6.3 写作流程
 
 ```text
-编写或修改英文 Markdown
-  -> 本地预览英文页面
-  -> 需要中文版本时手工创建或更新中文 Markdown
-  -> 检查 slug 与 translationKey 对应关系
+在 content/blog/ 编写或修改一篇 Markdown
+  -> 本地预览，检查中英文界面均展示相同原文
   -> 运行内容校验和静态构建
-  -> 提交英文原文与中文译文
+  -> 提交文章
   -> 部署
 ```
 
 ## 7. 搜索与标签
 
-首版使用 Nuxt Content 的 `queryCollectionSearchSections` 生成搜索数据，Fuse.js 在浏览器中完成搜索。搜索模块在用户首次打开弹窗时才加载并生成当前语言索引，不进入普通页面的 SSR payload。
+首版使用 Nuxt Content 的 `queryCollectionSearchSections` 生成搜索数据，Fuse.js 在浏览器中完成搜索。搜索模块在用户首次打开弹窗时才加载并生成统一文章索引，不进入普通页面的 SSR payload。
 
 规则：
 
 - Header 提供搜索入口。
 - `Cmd/Ctrl + K` 打开搜索弹窗。
-- 英文页面只搜索 `blogEn`。
-- 中文页面只搜索 `blogZh`。
+- 两种界面语言都搜索 `blog` 中的同一批文章。
 - 搜索标题、摘要、正文和标签。
-- 两种语言索引分开生成并按需加载。
+- 文章搜索数据按需加载并复用，结果链接随当前界面语言生成。
 - `draft: true` 的文章不进入索引。
 
-内容提交前由 `pnpm content:check` 校验集合内 slug、`translationKey` 的唯一性、译文结构化字段和本地图片路径；`pnpm check` 与 GitHub Actions CI 都会执行这项校验。
+内容提交前由 `pnpm content:check` 校验所有文章 slug 的格式与唯一性，以及本地图片路径；`pnpm check` 与 GitHub Actions CI 都会执行这项校验。
 
 文章数量或搜索索引明显增大后，再评估 Pagefind，不在首版提前引入。
 
@@ -221,9 +204,8 @@ URL 与 alternate 规则：
 
 - 英文 canonical 使用无前缀 URL，例如 `/blog/example`。
 - 中文 canonical 使用 `/zh` 前缀，例如 `/zh/blog/example`。
-- 只有中文译文真实存在时，英文文章才输出指向中文页面的 `hreflang`。
-- 中文页面必须输出对应英文原文的 alternate URL。
-- 不为缺失译文生成中文 Sitemap URL 或无效 `hreflang`。
+- 每篇已发布文章有两种界面语言的 URL，使用 i18n 输出互相对应的 alternate URL。
+- `hreflang` 和 Open Graph locale 表示界面语言，标题、摘要和正文均取自同一份文章。
 - 草稿不进入 Sitemap。
 
 生产域名确定为 `https://kevinguo.ink`，直接配置在 `nuxt.config.ts` 中，并同时提供给站点配置和 i18n SEO `baseUrl`。
@@ -241,8 +223,7 @@ URL 与 alternate 规则：
 
 - 英文固定页面路由。
 - 中文固定页面路由。
-- 所有已发布英文文章路由。
-- 所有真实存在的中文文章路由。
+- 所有已发布文章的无前缀路由和 `/zh` 路由。
 - 两种语言中实际存在的标签路由。
 
 构建时排除草稿和无效内容。生成结束后检查英文首页、中文首页、文章详情、标签、Sitemap、404 和静态资源。
@@ -257,7 +238,7 @@ URL 与 alternate 规则：
 - ESLint。
 - TypeScript 类型检查。
 - Nuxt Content Schema 校验。
-- 中英文映射、重复 slug、标签与资源路径校验。
+- 全局 slug 唯一性与格式、本地封面资源路径校验。
 - 执行 SSG 构建。
 
 ### `deploy.yml`
@@ -285,7 +266,7 @@ VERCEL_PROJECT_ID
 pnpm dev                  # 本地开发
 pnpm lint                 # ESLint
 pnpm typecheck            # Vue / TypeScript 类型检查
-pnpm content:check        # 内容 Schema、映射与路由校验，待实现
+pnpm content:check        # 内容 slug 与本地封面校验
 pnpm generate             # 生成静态站点
 pnpm preview              # 本地预览生产产物
 pnpm check                # 执行当前全部质量检查
@@ -297,22 +278,19 @@ pnpm check                # 执行当前全部质量检查
 | --- | --- |
 | 默认语言意外出现 `/en` 前缀 | 使用 `prefix_except_default`，所有链接通过 locale helper 生成 |
 | 浏览器自动把 `/` 跳到中文 | 关闭 `detectBrowserLanguage`，只允许用户主动切换 |
-| i18n 路由与 Content 路径重复语言前缀 | 页面路由和内容集合解耦，按 locale 选择集合 |
-| 缺少中文译文时语言切换进入 404 | 切换前通过 `translationKey` 检查目标集合是否存在 |
-| 缺少译文时生成无效 `hreflang` | 只为真实存在的译文输出 alternate URL |
-| 英文原文更新但中文译文遗漏 | 内容校验报告成对文章更新时间差异，由作者人工确认 |
+| i18n 路由与 Content 路径重复语言前缀 | 页面路由和内容集合解耦，两种界面共用 `blog` 集合 |
 | SSG 未发现全部动态路由 | 构建阶段显式枚举并预渲染 |
-| Fuse.js 索引随文章增加而变大 | 按语言懒加载，达到阈值后评估 Pagefind |
+| Fuse.js 索引随文章增加而变大 | 统一集合懒加载，达到阈值后评估 Pagefind |
 | 标签翻译导致 URL 不稳定 | 使用稳定标签 ID，显示名称单独翻译 |
 | 本地与 CI 依赖版本不一致 | 固定 Node.js、pnpm 和 lockfile |
 
 ## 13. 已确认决策
 
 1. 使用 Nuxt UI 基础组件，页面视觉自行设计。
-2. 英文是默认语言和原始创作语言。
+2. 英文是默认界面语言，文章可以使用任意写作语言。
 3. 英文路由不带前缀，中文路由统一带 `/zh`。
 4. 访问根路径始终显示英文，不执行浏览器语言自动跳转。
-5. UI 文案和文章的中文版本都由作者手工维护。
+5. UI 文案保留中英文；文章只维护一份原文，不需要译文。
 6. 不实现机器翻译、翻译 API、自动翻译脚本或翻译工作流。
 7. 搜索首版仅提供全局弹窗。
 8. 首版默认不接入访问统计。
@@ -322,16 +300,15 @@ pnpm check                # 执行当前全部质量检查
 
 - 正式网站名称、作者信息、默认 OG 图片和社交链接。
 - 首页最终信息架构与视觉方案。
-- 英文原文修改后提醒中文译文同步的具体校验规则。
 
 ## 14. 首版验收标准
 
 - `/`、`/blog`、`/tags`、`/about` 显示英文且不带语言前缀。
 - `/zh`、`/zh/blog`、`/zh/tags`、`/zh/about` 显示中文。
 - 用户可主动切换语言，且不会因浏览器语言被自动重定向。
-- 可通过 Markdown 独立维护英文原文和中文译文。
-- 文章、标签和搜索结果只展示当前语言内容。
-- 缺少中文译文时，不生成无效中文文章页、Sitemap URL 或 `hreflang`。
+- 每篇文章只需在 `content/blog/` 维护一个 Markdown 文件。
+- 两种界面展示同一批文章、标签和搜索内容，标题、摘要与正文保持原样。
+- 已发布文章在两种界面语言下均可访问，语言切换保留文章。
 - 草稿不会出现在页面、搜索索引和 Sitemap 中。
 - 文章详情正确渲染 Markdown、代码块、图片、目录和 MDC 组件。
 - 页面具备正确的 title、description、canonical、`hreflang`、OG 和 Sitemap。

@@ -2,7 +2,6 @@
 title: "博客写作示例：Markdown、MDC 与组件"
 description: 当前博客支持的 Markdown 排版、MDC 属性和文章组件示例，按用途查找并参考对应写法
 slug: hello-nuxt
-translationKey: hello-nuxt
 date: 2026-09-06
 updated: 2026-10-11
 tags:
@@ -13,9 +12,9 @@ featured: false
 draft: false
 ---
 
-这篇文章是本项目的写作示例。使用目录查找组件，查看实际效果，再打开 `content/zh-CN/blog/hello-nuxt.md` 参考对应写法。英文版本位于 `content/en-US/blog/hello-nuxt.md`。
+这篇文章是本项目的写作示例。使用目录查找组件，查看实际效果，再打开 `content/blog/hello-nuxt.md` 参考对应写法。中英文界面都展示这同一份文章。
 
-本文保留为草稿。需要在博客页面预览时，将对应文件顶部的 `draft` 改为 `false`。
+使用本文作为新文章模板时，可先将文件顶部的 `draft` 设为 `true`；准备公开后再改为 `false`。
 
 ## 组件速查
 
@@ -59,7 +58,7 @@ draft: false
 3. 最后确认发布状态。
 
 - [x] 填写文章标题与摘要
-- [x] 检查中英文文章的关联字段
+- [x] 检查文章 slug 和发布状态
 - [ ] 完成发布前预览
 
 任务列表在博客中用于展示状态，读者不能直接勾选修改。
@@ -69,7 +68,6 @@ draft: false
 | 字段             | 用途                     | 示例         |
 | ---------------- | ------------------------ | ------------ |
 | `slug`           | 决定文章地址             | `hello-nuxt` |
-| `translationKey` | 关联中英文版本           | `hello-nuxt` |
 | `draft`          | 控制文章是否出现在博客中 | `true`       |
 
 脚注适合放补充说明或出处，不打断正文。[^writing-example]
@@ -280,7 +278,6 @@ pnpm generate
 title: 博客写作示例
 description: 用于参考 Markdown 与 MDC 组件
 slug: hello-nuxt
-translationKey: hello-nuxt
 date: 2026-09-06
 updated: 2026-10-11
 tags:
@@ -347,7 +344,7 @@ print(isDraft ? "Draft" : "Published")
 ::
 
 ::tabs-item{label="发布"}
-将准备公开的语言版本设为 `draft: false`，并运行项目检查。
+将准备公开的文章设为 `draft: false`，并运行项目检查。
 
 ::
 
@@ -419,7 +416,7 @@ Obsidian 的提示框语法与 MDC 不同。博客文章使用 `note`、`tip`、
 
 #### 准备文章
 
-填写标题、摘要、日期、`slug` 与 `translationKey`。
+填写标题、摘要、日期与 `slug`。
 
 #### 编写正文
 
@@ -445,7 +442,7 @@ Obsidian 的提示框语法与 MDC 不同。博客文章使用 `note`、`tip`、
 :::field-group
 
 ::field{name="title" type="string" :required="true"}
-当前语言的文章标题。
+文章原始标题。
 
 ::
 

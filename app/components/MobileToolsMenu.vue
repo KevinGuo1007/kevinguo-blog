@@ -3,7 +3,7 @@ import type { DropdownMenuItem } from "@nuxt/ui";
 
 const { t } = useI18n();
 const { open: isSearchOpen } = useContentSearch();
-const { targetLabel, targetPath } = await useLocaleSwitchTarget();
+const { targetLabel, targetPath } = useLocaleSwitchTarget();
 const { isDark, startViewTransition } = useColorModeTransition();
 const isMenuOpen = ref(false);
 

@@ -1,6 +1,6 @@
 # Kevin Guo's Blog
 
-基于 Nuxt 4、Nuxt Content、Nuxt UI 和 `@nuxtjs/i18n` 的中英双语个人博客。英文是默认语言和原始内容语言，中文内容由作者手工编写维护。
+基于 Nuxt 4、Nuxt Content、Nuxt UI 和 `@nuxtjs/i18n` 的个人博客。界面默认英文、支持中文切换；文章按作者发布的原始语言展示，每篇只维护一份 Markdown。
 
 当前仓库已经完成项目初始化、运行环境固定、基础模块安装、双语路由、内容集合与示例文章配置，可以开始实现博客页面。完整技术方案参见 [`docs/blog-tech-scheme.md`](docs/blog-tech-scheme.md)。
 
@@ -29,7 +29,7 @@
 - `redhat.vscode-yaml`：提供 YAML 语法、Schema 校验和补全。
 - `alexcvzz.vscode-sqlite`：按需检查 Nuxt Content 生成的 `.data/content/contents.sqlite`。
 
-仓库的 `.vscode/settings.json` 已指定 i18n 文案目录和英文源语言。扩展只负责编辑器反馈，最终结果仍以仓库命令为准：代码问题运行 `pnpm lint` 和 `pnpm typecheck`，内容关系及 Frontmatter 运行 `pnpm content:check`，提交前运行 `pnpm check`。
+仓库的 `.vscode/settings.json` 已指定 i18n 文案目录和英文源语言。扩展只负责编辑器反馈，最终结果仍以仓库命令为准：代码问题运行 `pnpm lint` 和 `pnpm typecheck`，文章 slug 与本地封面运行 `pnpm content:check`，提交前运行 `pnpm check`。
 
 以下扩展在本工作区禁用，以避免重复提示或使用错误的运行方式：
 
@@ -98,8 +98,7 @@ app/
 ├── pages/                     # Nuxt 页面路由
 └── app.vue                    # 应用入口
 content/
-├── en-US/blog/                # 英文原始文章
-└── zh-CN/blog/                # 手工维护的中文译文
+└── blog/                      # 所有文章，每篇只维护一个 Markdown 文件
 i18n/locales/
 ├── zh.json                    # 中文 UI 文案（language: zh-CN）
 └── en.json                    # 英文 UI 文案（language: en-US）
@@ -114,26 +113,19 @@ nuxt.config.ts                 # Nuxt 与模块配置
 
 写作步骤、Frontmatter 字段、图片路径以及 Obsidian/普通 Markdown 迁移方法见 [`docs/blog-writing-guide.md`](docs/blog-writing-guide.md)。
 
-先编写英文原文：
+在统一的文章目录编写 Markdown，正文可以使用中文、英文或混合语言：
 
 ```text
-content/en-US/blog/<slug>.md
+content/blog/<slug>.md
 ```
 
-需要中文版本时，再由作者手工编写对应译文：
-
-```text
-content/zh-CN/blog/<slug>.md
-```
-
-项目不使用机器翻译、翻译 API 或自动翻译工作流。两个文件独立维护，但必须使用相同的 ASCII `slug` 和 `translationKey`。英文 Frontmatter 示例：
+每篇文章只维护一份文件，不需要译文或语言关联字段。`/blog/<slug>` 和 `/zh/blog/<slug>` 展示相同的标题、摘要和正文；导航、按钮、日期格式和其他页面继续随界面语言切换。Frontmatter 示例：
 
 ```yaml
 ---
 title: Building a Personal Blog with Nuxt
 description: Notes on the technical decisions behind this personal blog
 slug: building-a-nuxt-blog
-translationKey: building-a-nuxt-blog
 date: 2026-09-06
 updated: 2026-09-06
 image: /images/blog/building-a-nuxt-blog.webp
@@ -147,13 +139,12 @@ draft: false
 
 字段约定：
 
-- `slug`、`translationKey` 和标签 ID 只能使用小写 ASCII 字母、数字与连字符。
+- `slug` 和标签 ID 只能使用小写 ASCII 字母、数字与连字符。
 - `date` 和 `updated` 使用 `YYYY-MM-DD`。
 - `draft: true` 的文章之后必须从列表、搜索、Sitemap 和静态路由中排除。
 - `featured: true` 表示可展示在首页精选文章区域。
 - 标签保存稳定 ID；显示名称放在 i18n 语言文件中。
-- 英文文章可以单独发布；只有中文文件真实存在时才生成对应中文文章路由和 `hreflang`。
-- 中文译文必须对应一篇英文原文，不允许只存在中文文件。
+- `slug` 在所有文章中唯一。每篇已发布文章都可在英文或中文界面下阅读。
 
 已有的 `hello-nuxt.md` 可作为内容格式参考。
 
@@ -165,8 +156,7 @@ draft: false
 
 编辑 `app/pages/blog/index.vue`：
 
-- 调用 `useBlogCollection()` 获取当前语言对应的集合。
-- 使用 `queryCollection()` 查询文章。
+- 使用 `queryCollection("blog")` 查询统一的文章集合。
 - 排除 `draft: true`。
 - 按 `date` 倒序排列。
 - 创建 `PostCard.vue` 渲染标题、摘要、日期、标签和封面。
@@ -179,7 +169,7 @@ draft: false
 app/pages/blog/[slug].vue
 ```
 
-根据当前语言集合和 URL slug 查询文章，使用 `<ContentRenderer>` 渲染正文。找不到文章时返回 404，并为文章设置 title、description、canonical 和 Open Graph 信息。
+根据统一的 `blog` 集合和 URL slug 查询文章，使用 `<ContentRenderer>` 渲染正文。找不到文章时返回 404，并为文章设置 title、description、canonical 和 Open Graph 信息。
 
 ### 3. 实现全局布局
 
@@ -196,13 +186,13 @@ app/pages/blog/[slug].vue
 ### 4. 实现首页和标签
 
 - 首页查询 `featured: true` 的精选文章和最新文章。
-- 标签首页汇总当前语言的非草稿文章标签。
+- 标签首页汇总统一集合中的非草稿文章标签。
 - 创建 `app/pages/tags/[tag].vue` 展示对应标签文章。
 - 创建 `app/error.vue` 实现双语 404 页面。
 
 ### 5. 实现搜索
 
-通过 `queryCollectionSearchSections()` 获取当前语言搜索数据，使用 Fuse.js 在浏览器中搜索，并支持 `Cmd/Ctrl + K` 打开搜索弹窗。搜索弹窗和索引只在首次打开时加载，避免把全文索引写入每个页面的首屏 payload。
+通过 `queryCollectionSearchSections()` 获取统一文章集合的搜索数据，使用 Fuse.js 在浏览器中搜索，并支持 `Cmd/Ctrl + K` 打开搜索弹窗。搜索弹窗和索引只在首次打开时加载，避免把全文索引写入每个页面的首屏 payload。
 
 完成每一个阶段后运行 `pnpm check`，避免问题累积到部署阶段。
 
@@ -212,11 +202,10 @@ app/pages/blog/[slug].vue
 
 ### 内容与多语言
 
-- [x] 实现重复 slug、标签、图片路径和翻译映射校验脚本
+- [x] 实现全局 slug 格式、唯一性和本地封面路径校验脚本
 - [x] 增加 `pnpm content:check`
-- [x] 校验中文译文的英文原文关系（现有 Swift 笔记作为显式已知欠账保留警告）
-- [x] 在语言切换器中仅链接真实存在的文章译文
-- [ ] 约定英文原文更新后同步检查中文译文的人工维护流程
+- [x] 所有文章统一存放在 `content/blog/`，每篇只维护一份原文
+- [x] 切换界面语言时保留当前文章，内容保持一致
 
 ### SEO 与静态生成
 
@@ -224,7 +213,7 @@ app/pages/blog/[slug].vue
 - [ ] 为各页面接入 `useLocaleHead()` 和完整 SEO 元数据
 - [ ] 显式收集双语文章和标签的 Nitro prerender 路由
 - [ ] 将有效文章和标签动态路由接入 Sitemap
-- [x] 只为真实存在的译文输出 `hreflang`
+- [x] 为已发布文章的两种界面 URL 输出 `hreflang`
 - [ ] 校验草稿不会进入页面、搜索、Sitemap 和静态产物
 
 ### 工程与部署

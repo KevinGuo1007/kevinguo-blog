@@ -2,7 +2,6 @@
 title: Matt Pocock AI 驱动的软件工程方法论笔记
 description: 整理 Matt Pocock 的 AI Agent 软件工程方法论、常用 Skills、仓库初始化方式与相关概念
 slug: matt-pocock-ai-driven-software-engineering
-translationKey: matt-pocock-ai-driven-software-engineering
 date: 2026-09-15
 updated: 2026-09-23
 tags:

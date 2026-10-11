@@ -2,7 +2,6 @@
 title: Swift 与 SwiftUI 学习笔记
 description: 系统整理 SwiftUI 的核心概念、布局、数据流与示例项目，并提供旧教程迁移提示和复习路线
 slug: swift-swiftui-learning-notes
-translationKey: swift-swiftui-learning-notes
 date: 2026-09-09
 tags:
   - swift
