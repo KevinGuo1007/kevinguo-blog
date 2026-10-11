@@ -198,7 +198,7 @@ useSeoMeta({
     </p>
 
     <UPagination
-      v-if="filteredArticles.length > articlesPerPage"
+      v-if="filteredArticles.length"
       v-model:page="currentPage"
       :items-per-page="articlesPerPage"
       :total="filteredArticles.length"
