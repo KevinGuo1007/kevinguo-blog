@@ -1,50 +1,50 @@
 {
   "username": "KevinGuo1007",
-  "repositoryCount": 9,
-  "totalBytes": 309924,
+  "repositoryCount": 10,
+  "totalBytes": 344377,
   "items": [
     {
       "label": "TypeScript",
-      "value": 133382,
-      "percentage": 43.037,
+      "value": 151215,
+      "percentage": 43.9097,
       "icon": "simple-icons:typescript",
-      "color": "#3178c6"
+      "color": "#3178C6"
+    },
+    {
+      "label": "Vue",
+      "value": 76450,
+      "percentage": 22.1995,
+      "icon": "simple-icons:vuedotjs",
+      "color": "#4FC08D"
     },
     {
       "label": "Astro",
       "value": 62314,
-      "percentage": 20.1062,
+      "percentage": 18.0947,
       "icon": "simple-icons:astro",
-      "color": "#ff5a03"
-    },
-    {
-      "label": "Vue",
-      "value": 59830,
-      "percentage": 19.3047,
-      "icon": "simple-icons:vuedotjs",
-      "color": "#41b883"
+      "color": "#BC52EE"
     },
     {
       "label": "TeX",
       "value": 16292,
-      "percentage": 5.2568,
+      "percentage": 4.7309,
       "icon": "simple-icons:latex",
-      "color": "#3D6117"
+      "color": "#008080"
     },
     {
       "label": "Python",
       "value": 15328,
-      "percentage": 4.9457,
+      "percentage": 4.4509,
       "icon": "simple-icons:python",
-      "color": "#3572A5"
+      "color": "#3776AB"
     },
     {
       "label": "Other",
       "value": 22778,
-      "percentage": 7.3495,
+      "percentage": 6.6143,
       "icon": "lucide:shapes",
       "color": "#8b949e"
     }
   ],
-  "updatedAt": "2026-09-25T14:27:55.943Z"
+  "updatedAt": "2026-10-11T04:19:38.959Z"
 }

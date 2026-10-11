@@ -112,6 +112,8 @@ nuxt.config.ts                 # Nuxt 与模块配置
 
 ## 发布一篇文章
 
+写作步骤、Frontmatter 字段、图片路径以及 Obsidian/普通 Markdown 迁移方法见 [`docs/blog-writing-guide.md`](docs/blog-writing-guide.md)。
+
 先编写英文原文：
 
 ```text
